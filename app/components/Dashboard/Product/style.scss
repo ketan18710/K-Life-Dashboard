@@ -1,0 +1,104 @@
+@import '../../../styles/base/main.scss';
+.Product{
+  .formInput{
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    label{
+      font-size: 28px;
+      font-weight: 800;
+      color: $prim-highlight;
+      margin-bottom: 1rem;
+    }
+    input{
+      font-size: 22px;
+      font-weight: 600;
+      border: none;
+      color: $darkGrey;
+      &:focus,&:active,&:hover{
+        outline: none;
+      }
+    }
+    .title{
+      font-size: 48px;
+      font-weight: 800;
+      color: $prim-highlight; 
+      line-height: 20px;
+    }
+    button{
+      width: fit-content;
+    }
+  }
+  .formInputSingleRow{
+    flex-direction: row;
+    label,input,textarea {
+      margin: 0;
+    }
+    input{
+      margin-left: 1rem;
+    }
+  }
+  .formInputChoiceTick{
+    align-items: center;
+  }
+  .header{
+    @include spaceBetween;
+    button{
+      // margin-right: 3rem;
+    }
+  }
+  .images{
+    .products{
+      display: grid;
+      grid-template-columns: 30% 30% 30%;
+      gap: 2rem 2rem;
+      .editableImage{
+        height: 350px;
+      }
+      .editableImageAdd{
+        @include centreAlign;
+        .addIcon{
+          width: 100px;
+          height: 100px;
+        }
+      }
+    }
+  }
+  .accessories{
+    margin-top: 3rem;
+    .content{
+      @include spaceBetween;
+      .image{
+        width: 38%;
+        height: 200px;
+        position: relative;
+        @include centreAlign;
+        .hero{
+          max-width: 100%;
+          
+          max-height: 100%;
+          object-fit: contain;
+        }
+        .icon{
+          position: absolute;
+          top: 80px;
+          border-radius: 50%;
+          border: 1px solid $darkGrey;
+          background-color: $white;
+          padding: 7px;
+          display: none;
+        }
+        &:hover{
+          .icon{
+            display: block;
+          }
+        }
+        // padding: 2rem;
+      }
+      .editor{
+        width: 60%;
+        height: 100%;
+      }
+    }
+  }
+}

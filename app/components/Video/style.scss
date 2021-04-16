@@ -1,0 +1,60 @@
+@import '../../styles/base/main.scss';
+.showProductVideoModalWrapper{
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  .showProductVideoModal{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    .header{
+      width: 100%;
+      height: 50px;
+      background-color: $grey;
+      opacity: 0.8;
+      @include centreAlign;
+      justify-content: flex-end;
+      .cancel{
+        @include centreAlign;
+        i{
+          font-size: 25px;
+          font-weight: 300;
+          width: 35px;
+          height: 35px;
+          opacity: 0.5;
+        }
+      }
+    }
+    .content{
+      @include spaceBetween;
+      width: 100%;
+      height: 100%;
+      .arrow{
+        width: 40px;
+        height: 40px;
+        @include centreAlign;
+        background-color: $grey;
+        i{
+          color: $white;
+          margin: 0;
+          font-size: 20px;
+        }
+        &:hover,&:focus,&:active{
+          background-color: transparent;
+          i{
+            color: $grey;
+          }
+        }
+      }
+      .mediaPlayer{
+        max-width: 70%;
+        video{
+          max-width: 100%;
+        }
+      }
+    }
+  }
+}

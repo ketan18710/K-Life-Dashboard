@@ -1,0 +1,24 @@
+@import '../../styles/base/main.scss';
+.carrausel{
+  height: 500px;
+  position: relative;
+  transition: all 1s linear;
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .actions{
+    width: fit-content;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    @include centreAlign;
+    margin-right: 1rem;
+    .icon{
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+  }
+}

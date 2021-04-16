@@ -1,0 +1,103 @@
+@import '../../../styles/base/main.scss';
+.Categories{
+  .title{
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 20px;
+    color: $prim-highlight;
+  }
+  .header{
+    @include spaceBetween;
+    button{
+      width: fit-content;
+      margin: 0 0.5rem;
+    }
+  }
+  select{
+    padding: 0 0.5rem;
+    margin: 0 0.6rem;
+  }
+  .addNewBtnDiv{
+    margin-bottom: 1rem;
+    .btn1__primary{
+      width: fit-content;
+    }
+  }
+  .selectCategory{
+    border: 1px solid $darkGrey;
+    &:focus,&:active,&:hover{
+      outline: none;
+    }
+  }
+  .formInput{
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    label{
+      font-size: 28px;
+      font-weight: 600;
+      color: $prim-highlight;
+      margin-bottom: 1rem;
+    }
+    input{
+      font-size: 22px;
+      font-weight: 600;
+      border: none;
+      color: $darkGrey;
+      height: 30px;
+      &:focus,&:active,&:hover{
+        outline: none;
+      }
+    }
+  }
+  .addNewCategory{
+    .title{
+      font-size: 36px;
+      font-weight: 600;
+    }
+    button{
+      width: fit-content;
+      padding: 0 0.6rem;
+    }
+  }
+  .categoryForm{
+    margin: 4rem 0;
+    .saveContent{
+      width: fit-content;
+      margin: 0 auto;
+    }
+    .subCategories{
+      display: grid;
+      grid-template-columns: 30% 30% 30%;
+      gap: 2rem;
+      .subCategory{
+        border: 1px solid $darkGrey;
+        padding: 1rem;
+        @include spaceBetween;
+        flex-direction: column;
+        .title{
+          margin: auto 0;
+          font-size: 22px;
+          font-weight: 700;
+          line-height: 46px;
+          text-align: center;
+        }
+        h5{
+          @include centreAlign;
+          margin: 0 auto ;
+          margin-top: auto;
+        }
+      }
+      .subCategoryAdd{
+        @include centreAlign;
+        width: 200px;
+        height: 250px;
+        img{
+          width: 100px;
+          height: 100px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

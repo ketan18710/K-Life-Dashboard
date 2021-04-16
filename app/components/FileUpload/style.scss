@@ -1,0 +1,31 @@
+@import '../../styles/base/main.scss';
+.fileUploadWrapper{
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  z-index: 500;
+  background-color: $grey;
+  @include centreAlign;
+  .modal{
+    background-color: $white ;
+    @include spaceBetween;
+    flex-direction: column;
+    width: 40%;
+    min-height: 300px;
+    padding: 6rem 4rem;
+    .uploadImage,.actions{
+      width: 100%;
+    }
+    .actions{ 
+      display: flex;
+      justify-content: flex-end;
+      button{
+        &:last-of-type{
+          margin: 0 20% 0 2%;
+        }
+      }
+    }
+  }
+}

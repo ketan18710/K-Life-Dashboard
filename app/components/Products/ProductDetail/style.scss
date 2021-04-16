@@ -1,0 +1,238 @@
+@import '../../../styles/base/main.scss';
+.productDetail{
+  background-color: $backgroundGreen;
+  background-image: linear-gradient(to bottom right, rgba(0, 160, 161, 0.2), rgba(0, 160, 161, 0.4));
+  padding: 4rem 0;
+  .title{
+    color: $prim-highlight;
+    font-size: 48px;
+    font-weight: 700;
+    text-align: center;
+    margin: 3rem 0;
+    @media  (max-width: 400px) {
+      font-size: 42px;
+    }
+  }
+  .description{
+    color: $darkGrey;
+    font-size: 24px;
+    text-align: center;
+    margin: 2rem auto;
+    font-weight: 500;
+    width: 90%;
+  }
+  .details{
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    .images{
+      width: 700px;
+      max-width: 700px;
+      background-color: $white;
+      // border: 1px solid black;
+      box-shadow: 0 0 8px rgba(85, 85, 85,70%);
+      height: 720px;
+      .activeImage{
+        width: 100%;
+        height: 500px;
+        max-height: 500px;
+        img{
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+      .imageCarrausel{
+        width: 100%;
+        height: 200px;
+        max-height: 200px;
+        @include centreAlign;
+        gap: 2rem;
+        position: relative;
+        img{
+          width: 27%;
+          height: 100%;
+          object-fit: contain;
+          cursor: pointer;
+          &:first-of-type,&:last-of-type{
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            top: 100px;
+          }
+          &:first-of-type{
+            left: 12px;
+          }
+          &:last-of-type{
+            right: 12px;
+          }
+        }
+
+      }
+      @media (max-width : 1300px){
+        width: 500px;
+      }
+    }
+    .features{
+      width: 50%;
+      max-width: 800px;
+      margin: 2rem 0;
+      padding: 2rem;
+      padding-left: 8rem;
+      display: flex;
+      justify-content: flex-start;
+      li{
+        color: $darkGrey !important;
+        margin-bottom: 0.5rem;
+        font-size: 22px;
+        line-height: 24px;
+        font-weight: 600;
+        padding-left: 1rem;
+        &::marker{
+          content: '✔';
+          color: $darkGrey;
+        }
+      }
+      @media (max-width : 1000px){
+        width: 100%;
+        padding: 2rem;
+      }
+    }
+  }
+  .mediaPlayer{
+    padding: 2rem  ;
+    video{
+      width: 100%;
+      height: 600px;
+    }
+  }
+  .manuals{
+    width: 100%;
+    @include centreAlign;
+    flex-wrap: wrap;
+    gap: 4rem;
+    margin: 3rem 0;
+    height: 50px;
+    a{
+      font-size: 22px;
+      min-width: 150px;
+      width: unset;
+      height: 40px;
+      font-weight: 600;
+      padding: 0.5rem 0.7rem;
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img{
+        margin-left: 1rem;
+      }
+      .normal{
+        display: block;
+      }
+      .hover{
+        display: none;
+      }
+      &:hover{
+        .normal{
+          display: none;
+        }
+        .hover{
+          display: block;
+        }
+
+      }
+    }
+  }
+  .accessories{
+    width: 100%;
+    padding: 2rem;
+    .title{
+      width: 100%;
+      color: $prim-highlight;
+      @media  (max-width: 400px) {
+        font-size: 38px;
+      }
+    }
+    .content{
+      @include centreAlign;
+      img{
+        width: 400px;
+        height: 400px;
+        object-fit: contain;
+        margin-right: 5rem;
+        @media (max-width : 1000px){
+          margin-right: 0rem;
+        }
+      }
+      .data{
+        max-width: 800px;
+        margin: 2rem 0;
+        padding: 2rem;
+        padding-left: 8rem;
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        li{
+          color: $darkGrey !important;
+          margin-bottom: 0.5rem;
+          font-size: 22px;
+          line-height: 24px;
+          font-weight: 600;
+          padding-left: 1rem;
+          &::marker{
+            content: '✔';
+            color: $darkGrey;
+          }
+        }
+        @media (max-width : 1000px){
+          width: 100%;
+          padding: 2rem;
+        }
+      }
+      
+      @media (max-width : 1000px){
+        flex-direction: column;
+      }
+    }
+  }
+  .products{
+    // @include centreAlign;
+    // flex-direction: column;
+    // gap: 6rem;
+    // padding: 0;
+    width: 100%;
+    // margin:  0;
+    // flex-wrap: wrap;
+    .title{
+      margin-bottom: 0;
+    }
+    .productList{
+      width: 100%;
+      display: grid;
+      grid-template-columns: 31% 31% 31%;
+      gap: 4rem 2rem ;
+      margin: 4rem auto;
+      justify-content: center;
+      @media (max-width : 1000px){
+        grid-template-columns: auto;
+      }
+      .product{
+        @include centreAlign;
+        @media (max-width : 310px){
+          .Card4{
+            width: 250px;
+            min-width: unset;
+          }
+        }
+        @media (max-width : 310px){
+          .Card4{
+            width: 200px;
+          }
+        }
+      }
+    }
+  }
+}

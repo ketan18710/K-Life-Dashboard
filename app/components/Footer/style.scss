@@ -1,0 +1,52 @@
+@import '../../styles/base/main.scss';
+.Footer{
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 3rem ;
+  background-color: $primary-green;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: auto;
+  @media  (max-width: 625px) {
+    // display: none;
+    justify-content: center;
+  }
+  .mapouter{position:relative;text-align:right;height:200px;width:200px;}
+  .gmap_canvas {overflow:hidden;background:none!important;height:200px;width:200px;}
+  .info,.location{
+    margin-bottom: auto;
+    h3{
+      font-size: 36px;
+      font-weight: 600;
+      color: $white;
+    }
+    h4{
+      font-size: 16px;
+      font-weight: 500;
+      color: $white;
+      margin: 0 0 6px 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      a{
+        text-decoration: none;
+        color: $white;
+        margin-left: 1rem;
+      }
+    }
+  }
+  .info{
+    min-width: 250px;
+    .logo{
+      width: 150px;
+      height: 80px;
+      object-fit: contain;
+    }
+    img{
+      margin-bottom: 1rem;
+    }
+  }
+  .location{
+    margin-right: 4rem;
+  }
+}

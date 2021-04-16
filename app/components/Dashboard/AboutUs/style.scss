@@ -1,0 +1,12 @@
+@import '../../../styles/base/main.scss';
+.Dashboard__aboutUs{
+  .actions{
+    margin-bottom: 0.4rem;
+    display: flex;
+    justify-content: flex-end;
+    button{
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+}

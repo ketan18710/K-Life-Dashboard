@@ -1,0 +1,19 @@
+@import '../../styles/base/main.scss';
+.icon{
+  width: fit-content;
+  height: fit-content;
+  .main{
+    display: block;
+  }
+  .hover{
+    display: none;
+  }
+  &:hover{
+    .main{
+      display: none;
+    }
+    .hover{
+      display: block;
+    }
+  }
+}

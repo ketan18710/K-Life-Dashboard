@@ -1,0 +1,14 @@
+@import "../../styles/base/main.scss";
+.textEditor{
+  .tox .tox-statusbar {
+    display: none;
+  }
+}
+// .tox-toolbar:last-child{
+//   .tox-tbtn.tox-tbtn--select:nth-last-child(2),.tox-tbtn.tox-tbtn--select:nth-last-child(1){
+//     @include btn1__primary;
+//   }
+//   .tox-tbtn.tox-tbtn--select:nth-last-child(2){
+//     margin-right: $mg-1;
+//   }
+// }

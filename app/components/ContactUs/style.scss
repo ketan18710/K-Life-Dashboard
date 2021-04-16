@@ -1,0 +1,95 @@
+@import '../../styles/base/main.scss';
+.contactUsWrapper{
+  width: 100vw;
+  height: 100vh;
+  min-width: fit-content;
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  z-index: 100000;
+  @include centreAlign; 
+  .modal{
+    min-width: 300px;
+    min-height: 200px;
+    max-height: 80vh;
+    overflow-y: auto;
+    &::-webkit-scrollbar{
+      width: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $grey;
+      outline: none;
+      border-radius: 4px;
+    }
+    @include spaceBetween;
+    padding: 1rem 4rem ;
+    background-color: $white;
+    flex-direction: column;
+    border-radius: 8px;
+    box-shadow: 0 0 7px 1px $darkGrey;
+    position: relative;
+    .title{
+      text-align: center;
+      font-size: 36px;
+      font-weight: 800;
+      color: $darkGrey;
+    }
+    .field{
+      display: flex;
+      flex-direction: column;
+      margin: 1rem 0;
+      width: 100%;
+      label{
+        font-size: 18px;
+        font-weight: 800;
+        color: $darkGrey;
+        margin-bottom: 0.5rem;
+      }
+      input,textarea{
+        height: 36px;
+        border-radius: 4px;
+        border: 1px solid $darkGrey;
+        min-width: 400px;
+        padding-left: 1rem;
+        color: $darkGrey;
+        font-size: 16px;
+        &:focus,&:active,&:hover{
+          border: 1px solid $darkGrey;
+          outline: none;
+        }
+        &::placeholder{
+          font-size: 16px;
+          color: $darkGrey;
+        }
+        @media  (max-width: 600px){
+          min-width: 150px;
+          max-width: 100%;  
+        }
+      }
+      textarea{
+        height: 100px;
+      }
+      button{
+        margin-left: auto;
+        height: 40px;
+        font-size: 22px;
+      }
+    }
+    img{
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      background-color: transparent;
+      cursor: pointer;
+    }
+  }
+  
+  @media  (max-width: 500px){
+    // width: 143vw;
+    .modal{
+      padding: 1rem 2rem;
+      min-width: 200px;
+      max-width: 250px;
+    }
+  }
+}
