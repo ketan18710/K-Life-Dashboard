@@ -11,6 +11,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -84,6 +85,7 @@ export function App(props) {
   const [productImageType, setProductImageType] = useState({
     carrousel : false,
     accessories : false,
+    file : false,
   })
   const [triggers, setTriggers] = useState({
     addLatest : false,
@@ -115,7 +117,7 @@ export function App(props) {
     if(AuthHelper.isAuthenticated()){
       fetchData()
       setLoggedIn(true)
-      setAppLoader(true)
+      // setAppLoader(true)
     }else{
       // toast.error('login first')
       redirectToUrl(APP_ROUTES.LOGIN)
@@ -131,11 +133,11 @@ export function App(props) {
   useEffect(() => {
     const {status,data} = userConfig
     if(status === 1){
-      debugger
       let parsed = JSON.parse(data)
       setConfig(parsed)
       setAppLoader(false)
     }else if(status === -1){
+      toast.error(data)
       setAppLoader(false)
     }
   }, [userConfig.status])
@@ -148,6 +150,10 @@ export function App(props) {
     if(status === 1){
       setConfig(data)
       setSaveBtnLoader(false)
+      toast.success('Saved successfully')
+    }else{
+      setSaveBtnLoader(false)
+      toast.error(data)
     }
   }, [save.status])
   const mainBodyObserverCallback = () => {
@@ -207,7 +213,7 @@ export function App(props) {
                     <Route exact path={APP_ROUTES.DASHBOARD} component={()=><Home saveBtnLoader={saveBtnLoader} uploadImage={(data)=>uploadImage(data)} activeType={activeType} resetUploadImage={()=>resetUploadImage()} setactiveType={(data)=>setactiveType(data)} triggers={triggers} setTriggers={(data)=>setTriggers(data)} saveData={(data)=>saveData(data)} save={save}   uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD} config={config} setConfig={(data)=>setConfig(data)}  />} />
                     <Route exact path={APP_ROUTES.LOGIN} component={()=><Login setLoggedIn={(val)=>setLoggedIn(val)} login={(data)=>login(data)} loginData={loginData} />} />
                     <Route exact path={APP_ROUTES.RESET_PASSWORD} component={()=><ResetPassword resetPasswordData={resetPasswordData}  reset={(data)=>reset(data)}/>} />
-                    <Route exact path={APP_ROUTES.DASHBOARD_GALLERY} component={()=><Gallery loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />
+                    <Route exact path={APP_ROUTES.DASHBOARD_GALLERY} component={()=><Gallery saveBtnLoader={saveBtnLoader}  triggers={triggers} setTriggers={(data)=>setTriggers(data)} loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />
                     <Route exact path={APP_ROUTES.CATEGORIES} component={()=><Categories  saveBtnLoader={saveBtnLoader} loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />
                     <Route exact path={APP_ROUTES.DASHBOARD_ABOUTUS} component={()=><AboutUs  saveBtnLoader={saveBtnLoader} loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />
                     <Route exact path={APP_ROUTES.SUB_CATEGORIES} component={()=><SubCategory  saveBtnLoader={saveBtnLoader} loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />

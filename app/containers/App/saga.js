@@ -3,7 +3,7 @@ import { GET_DATA,GET_LOGIN,GET_RESET_PASSWORD,SAVE_DATA, SAVE_IMAGE } from './c
 import {request,AuthHelper} from 'utils/common'
 import {API_CONSTANTS,PROD_DOMAIN,STATUS_CODES} from 'utils/constants'
 import {saveDataResult, setData,saveImageResult, setLgin, setResetPAssword} from './actions'
-import { DEFAULT_IMAGE_2 } from '../../utils/constants';
+import { DEFAULT_IMAGE_2, NO_IMAGE } from '../../utils/constants';
 
 // Individual exports for testing
 export default function* appSaga() {
@@ -23,6 +23,7 @@ function* getDataFunc(){
           method: 'GET',
           headers: {
               'Content-type': 'application/json; charset=UTF-8',
+              'Access-Control-Allow-Origin': '*',
           },
       }
     ) 
@@ -162,8 +163,6 @@ function* loginFunc(data){
           },
       }
     ) 
-    console.log(login,'login')
-    debugger
     const {statusCode} = login
     if(statusCode === STATUS_CODES.SUCCESS){
       yield put(
@@ -208,12 +207,23 @@ function* saveImageFunc(data){
           },
       }
     ) 
-    yield put(
-      saveImageResult({
-        status: API_CONSTANTS.success,
-        data: image.image
-      }),
-    );
+    const {statusCode} = image
+    if(statusCode === STATUS_CODES.SUCCESS){
+      yield put(
+        saveImageResult({
+          status: API_CONSTANTS.success,
+          data: {link :  image.image,title : image.fileName}
+        }),
+      );
+    }else{
+      yield put(
+        saveImageResult({
+          status: API_CONSTANTS.error,
+          data: image.message
+        }),
+      );
+
+    }
   }catch (err) {
     // Set error state
     console.log(err);

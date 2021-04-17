@@ -1,6 +1,7 @@
 {
   "name": "react-boilerplate",
   "version": "4.0.0",
+  "proxy" : "https://api.loopedincode.com/klife",
   "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
   "repository": {
     "type": "git",

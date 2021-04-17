@@ -9,10 +9,19 @@
     height: 75px;
     border-radius: 50%;
     background-color: transparent;
-    border: 4px solid $darkGrey;
-    border-top-color: $primary-green;
-    -webkit-animation: 0.2s spin linear infinite;
-    animation: 0.2s spin linear infinite;
+    border: 4px solid $grey;
+    border-top-color: $prim-highlight ;
+    -webkit-animation:1s spin linear infinite;
+    animation: 1 spin linear infinite;
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   }
 
 }

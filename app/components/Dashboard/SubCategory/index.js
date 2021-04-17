@@ -22,8 +22,8 @@ function SubCategory(props) {
     images : [],
     description : ``,
     features : '',
-    video : '',
-    manuals : '',
+    video : 'video url',
+    manuals : [],
     accessories : {image : '',data : ''},
   }
   const [newProdData, setNewProdData] = useState(newProdVals)

@@ -47,6 +47,17 @@
       // margin-right: 3rem;
     }
   }
+  .manuals{
+    .content{
+      @include centreAlign;
+      gap: 2rem;
+      a{
+        @include centreAlign;
+        font-size: 18px;
+        text-decoration: none;
+      }
+    }
+  }
   .images{
     .products{
       display: grid;

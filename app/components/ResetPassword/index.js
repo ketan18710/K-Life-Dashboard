@@ -10,7 +10,7 @@ function ResetPassword(props) {
   })
   const [passwordMismatcch, setPasswordMismatcch] = useState(false)
   const resetPasswordFunc = () => {
-    if(form.new === form.again && form.new.length>4){
+    if(form.new === form.again){
       reset({newPassword : form.new})
       setPasswordMismatcch(false)
     }else{

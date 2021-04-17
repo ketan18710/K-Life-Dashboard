@@ -8,6 +8,7 @@ import AddIcon from '../../../images/icons/add.svg'
 import { useParams } from 'react-router-dom';
 import FileUpload from '../../FileUpload/index'
 import Loader from '../../Loader';
+import { toast } from 'react-toastify';
 function Product(props) {
   const {config,setConfig,saveData,uploadImage,uploadImageData,triggers,setTriggers,productImageType,setProductImageType,saveBtnLoader} = props
   const {category_slug,sub_category_slug,model_id} = useParams();
@@ -30,16 +31,22 @@ function Product(props) {
     console.log({productImageType,product})
     let {prod,prodIndex} =  getProduct()
     console.log(config,'config')
-    debugger
     if(productImageType.carrousel){
-      prod.images.push(link)  
+      prod.images.push(link.link)  
     }else if(productImageType.accessories){
       prod.accessories = {image : link,data : prod.accessories.data}
+    }else if(productImageType.file){
+      if(typeof(prod.manuals) === "string"){
+        prod.manuals =[link]
+      }else{
+        prod.manuals.push(link)
+      }
     }
+    toast.success('Uploaded successfully')
     setProduct(prod)
     setTriggers({...triggers,uploadMedia : false ,fileModal : false})
   }
-  
+  console.log(product)
   useEffect(() => {
     if(triggers.uploadMedia){
       setUploadedMediaFunc(uploadImageData.data)
@@ -50,7 +57,27 @@ function Product(props) {
     let config_temp  = config
     let prod = product
     console.table(prod,'prod_New')
-    // debugger
+    let latest = config.latest.find(item=>item.model_id === model_id)
+    let latestIndex = config.latest.findIndex(item=>item.model_id === model_id)
+    if(product.latest){
+      let temp = {
+        "title": product.title,
+        "image" : product.images.length ? product.images[0] : NO_IMAGE,
+        "category_slug" : category_slug,
+        "description":product.description,        
+        "sub_category_slug": sub_category_slug,
+        "model_id": model_id
+      }
+      if(!latest){
+        config_temp.latest.push(temp)
+      }else{
+        config_temp.latest[latestIndex] = temp
+      }
+    }else{
+      if(latest){
+        config_temp.latest.splice(latestIndex,1)
+      }
+    }
     prod.features = tinymce1.current.editor.getContent()
     prod.accessories =  {data : tinymce1.current.editor.getContent() , image : prod.accessories.image  ? prod.accessories.image : NO_IMAGE}
     config_temp['categories'][categoryIndex]['subCategories'][subCategoryIndex]['products'][productIndex] = prod
@@ -95,15 +122,25 @@ function Product(props) {
     temp.splice(index,1)
     setProduct({...product,images : temp})
   }
+  const markLatest = (val) => {
+    if(!val){
+      let latest = config.latest.find(item=>item.model_id === model_id)
+      let latestIndex = config.latest.findIndex(item=>item.model_id === model_id)
+      if(latest){
+        lat
+      }
+    }
+  }
+  
   return (
     <>
+      <FileUpload open={triggers.fileModal} close={()=>setTriggers({...triggers,fileModal : false})}   onChangeMediaFunc={(e)=>onChangeMediaFunc(e)} submitMediaFormFunc={()=>submitMediaFormFunc()} />
         {
-          saveBtnLoader
+          saveBtnLoader || triggers.fileModal
           ?
           <Loader />
           :
           <div className="Product">
-            <FileUpload open={triggers.fileModal} close={()=>setTriggers({...triggers,fileModal : false})}   onChangeMediaFunc={(e)=>onChangeMediaFunc(e)} submitMediaFormFunc={()=>submitMediaFormFunc()} />
             <div className="header">
               <div className="formInput">
                 <input onChange={(e)=>setProduct({...product,title: e.target.value})} className="title" type="text"  value={product && product.title}/>
@@ -145,6 +182,22 @@ function Product(props) {
                 }}
               />
             </div>
+            <div className="formInput formInputSingleRow">
+              <label htmlFor="slug">Product Video Link  </label>
+              <input onChange={(e)=>setProduct({...product,video: e.target.value})} type="text"  value={product && product.video}/>
+            </div>
+            <div className="manuals">
+              <div className="formInput ">
+                <label htmlFor="slug">Manuals </label>
+                <div className="content">
+                  {
+                    product && product.manuals && (typeof(product.manuals) !== 'string') && product.manuals.map(product=><a download href={product.link} className="btn1__primary">{product.title}</a>)
+                  }
+                  <a   onClick={()=>{ setProductImageType({...productImageType,file : true}) ;setTriggers({...triggers,fileModal : true})}} className="btn1__primary"> Add more</a>
+                </div>
+                {/* <img  onClick={()=>{ setProductImageType({...productImageType,file : true}) ;setTriggers({...triggers,fileModal : true})}} src={EditIcon} alt="edit icon" className="icon"/> */}
+              </div>
+            </div>
             <div className="images">
               <div className="formInput">
                 <label htmlFor="Product images">Product images</label>
@@ -160,7 +213,7 @@ function Product(props) {
             </div>
             <div className="formInput formInputSingleRow formInputChoiceTick">
               <label htmlFor="Mark Latest"> Mark as Latest Product</label>
-              <input onChange={(e)=>{setProduct({...product,'latest': e.target.checked})}} value={product && product.latest ? product.latest : false} type="checkbox" name="mark latest" id=""/>
+              <input onChange={(e)=>{setProduct({...product,'latest': e.target.checked})}} checked={product && product.latest} type="checkbox" name="mark latest" id=""/>
             </div>
             <div className="accessories">
               <div className="formInput">

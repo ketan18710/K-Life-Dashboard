@@ -3,6 +3,7 @@ import './style.scss'
 import Logo from '../../images/logo.png'
 import {AuthHelper,redirectToUrl} from 'utils/common'
 import {APP_ROUTES} from 'utils/constants'
+import { toast } from 'react-toastify';
 function Login(props) {
   const {login,loginData,setLoggedIn} = props
   const [loginForm, setLoginForm] = useState({
@@ -22,9 +23,10 @@ function Login(props) {
     if(status === 1){
       setLoggedIn(true)
       AuthHelper.login(data)
+      toast.success('Logged In Successfully')
       redirectToUrl(APP_ROUTES.DASHBOARD)
     }else if(status === -1){
-      alert(data)
+      toast.error(data)
     }
   }, [loginData])
   return (

@@ -3,6 +3,7 @@ import {APP_ROUTES} from 'utils/constants'
 import {redirectToUrl} from 'utils/common'
 import Loader from 'components/Loader'  
 import ADD_ICON from '../../../images/icons/add.svg'
+import CLOSE_ICON from '../../../images/icons/close.svg'
 import './style.scss'
 function Categories(props) {
   console.log(props,'categoryProps')
@@ -50,6 +51,16 @@ function Categories(props) {
     saveData(config_temp)
 
   }
+  const deleteSubCat = (index) => {
+    let temp = category['subCategories']
+    temp.splice(index,1)
+    setCategory({...category,subCategories : temp})
+  }
+  const deleteCategory = () => {
+    let temp = config
+    temp['categories'].splice(categoryIndex,1)
+    saveData(temp)
+  }
   
   return (
     <>
@@ -73,8 +84,13 @@ function Categories(props) {
         {
           category  && Object.keys(category).length > 0 && !newCategoryTrigger &&
           <div className="categoryForm">
-            <div className="formInput">
-              <button onClick={()=>saveCategoryChanges()} className="saveContent btn2__secondary">Save Changes</button>
+            <div className="formGroup">
+              <div className="formInput">
+                <button onClick={()=>saveCategoryChanges()} className="saveContent btn2__primary">Save Changes</button>
+              </div>
+              <div className="formInput">
+                <button onClick={()=>deleteCategory()} className="saveContent btn2__secondary">Delete Category</button>
+              </div>
             </div>
             <div className="formInput">
               <label htmlFor="category Title">Category Title  :   </label>
@@ -90,12 +106,13 @@ function Categories(props) {
             <div className="subCategories">
               {
                 category  && Object.keys(category).length > 0 && category.subCategories  &&
-                category.subCategories.map(item=>
+                category.subCategories.map((item,index)=>
                   <div className="subCategory">
                     <h4 className="title">{item.title}</h4>
                     <p className="description">{item.description}</p>
                     <h2>{ }</h2>
                     <h5 className="btn2__primary" onClick={()=>redirectToUrl(APP_ROUTES.SUB_CATEGORIES_ALIAS(category.category_slug,item.sub_category_slug))}>Edit</h5>
+                    <img onClick={()=>deleteSubCat(index)} src={CLOSE_ICON} alt="" className="closeIcon"/>
                   </div>
                 )
               }

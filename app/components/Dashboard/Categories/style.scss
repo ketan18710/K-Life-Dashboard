@@ -50,6 +50,10 @@
       }
     }
   }
+  .formGroup{
+    @include centreAlign;
+    gap: 3rem;
+  }
   .addNewCategory{
     .title{
       font-size: 36px;
@@ -75,6 +79,24 @@
         padding: 1rem;
         @include spaceBetween;
         flex-direction: column;
+        position: relative;
+        .closeIcon{
+          padding: 2px;
+          object-fit: contain;
+          position: absolute;
+          top: -13px;
+          right: 0;
+          border: 1px solid $darkGrey;
+          cursor: pointer;
+          border-radius: 50%;
+          background-color: $white;
+          display: none;
+        }
+        &:hover{
+          .closeIcon{
+            display: block;
+          }
+        }
         .title{
           margin: auto 0;
           font-size: 22px;

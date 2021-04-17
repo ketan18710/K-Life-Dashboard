@@ -3,5 +3,17 @@
   display: grid;
   grid-template-columns: 30% 30% 30%;
   gap: 2rem 2rem;
-  
+  .editableImage{
+    width: 350px;
+    height: 350px;
+  }
+  .editableImageAdd{
+    width: 350px;
+    height: 350px;
+    @include centreAlign;
+    .addIcon{
+      width: 120px;
+      height: 120px;
+    }
+  }
 }
