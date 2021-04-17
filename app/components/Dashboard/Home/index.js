@@ -6,6 +6,9 @@ import EditIcon from '../../../images/icons/edit.svg'
 import {Card3 as Card} from 'components/Cards/index'
 import FileUpload from '../../FileUpload/index'
 import Loader from '../../Loader/index'
+import {redirectToUrl} from 'utils/common'
+import {APP_ROUTES} from 'utils/constants'
+import { add } from 'lodash'
 function DashboardHome(props) {
   const {config,uploadImage,uploadImageData,triggers ,setTriggers, activeType, setactiveType,saveData,saveBtnLoader ,setConfig,resetUploadImage} = props
   const [configTemp, setConfigTemp] = useState('')
@@ -247,7 +250,10 @@ function DashboardHome(props) {
                       }
                     </select>
                   }
-                  <button className="markLatest" onClick={()=>addNewLatestProd()}>Add to Latest Product</button>
+                  {
+                    addLatestValues.category_slug && addLatestValues.sub_category_slug && addLatestValues.model_id &&
+                    <button className="markLatest btn1__primary" onClick={()=>addNewLatestProd()}>Add to Latest Product</button>
+                  }
                 </div>
               }
               <div className="products">
@@ -258,7 +264,7 @@ function DashboardHome(props) {
                         title={product.title}
                         image={product.image}
                         description={product.description}
-                        action={()=>alert(1)}
+                        action={()=>redirectToUrl(APP_ROUTES.PRODUCT_ALIAS(product.category_slug,product.sub_category_slug,product.model_id))}
                         actionText="Edit"
                         close={()=>{setAddLatestValues(product);addNewLatestProd(true,index,product)}}
                       />

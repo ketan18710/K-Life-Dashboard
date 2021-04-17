@@ -178,6 +178,11 @@
         padding: 0 0.5rem;
         margin-right: 1rem;
       }
+      button{
+        width: fit-content;
+        font-size: 18px;
+        font-weight: 600;
+      }
     }
     .products{
       display: grid;
