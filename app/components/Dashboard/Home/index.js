@@ -153,7 +153,7 @@ function DashboardHome(props) {
 
   useEffect(() => {
     if(triggers.uploadMedia){
-      setUploadedMediaFunc(uploadImageData.data)
+      setUploadedMediaFunc(uploadImageData.data.link)
     }
   }, [triggers.uploadMedia])
 

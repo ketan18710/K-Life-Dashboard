@@ -35,6 +35,8 @@ const appReducer = (state = initialState,  { type, payload }) =>
   produce(state, draft => {
     switch (type) {
       case DEFAULT_ACTION:
+        draft.login.status = API_CONSTANTS.init;
+        draft.login.data = null;
         break;
       case RESET_UPLOAD_IMAGE : {
         draft.imageUpload.status = API_CONSTANTS.init;

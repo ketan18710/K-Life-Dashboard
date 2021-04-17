@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import FileUpload from '../../FileUpload/index'
 import Loader from '../../Loader';
 import { toast } from 'react-toastify';
+import Error404 from '../../Error404';
 function Product(props) {
   const {config,setConfig,saveData,uploadImage,uploadImageData,triggers,setTriggers,productImageType,setProductImageType,saveBtnLoader} = props
   const {category_slug,sub_category_slug,model_id} = useParams();
@@ -140,6 +141,8 @@ function Product(props) {
           ?
           <Loader />
           :
+          !product ?
+          <Error404 /> :
           <div className="Product">
             <div className="header">
               <div className="formInput">

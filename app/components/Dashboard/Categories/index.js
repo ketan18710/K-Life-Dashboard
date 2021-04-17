@@ -5,6 +5,7 @@ import Loader from 'components/Loader'
 import ADD_ICON from '../../../images/icons/add.svg'
 import CLOSE_ICON from '../../../images/icons/close.svg'
 import './style.scss'
+import Error404 from '../../Error404'
 function Categories(props) {
   console.log(props,'categoryProps')
   const newCategory = {
@@ -94,14 +95,14 @@ function Categories(props) {
             </div>
             <div className="formInput">
               <label htmlFor="category Title">Category Title  :   </label>
-              <input onChange={(e)=>editCategory('title',e.target.value)} value={category.title} type="text"/> 
+              <input placeholder="Category Title" onChange={(e)=>editCategory('title',e.target.value)} value={category.title} type="text"/> 
             </div>
             <div className="formInput">
-              <label htmlFor="category Title">Category Slug   :   </label>
-              <input  onChange={(e)=>editCategory('category_slug',e.target.value)} value={category.category_slug} type="text"/> 
+              <label htmlFor="category slug">Category Slug   :   </label>
+              <input  placeholder="Category Slug"  onChange={(e)=>editCategory('category_slug',e.target.value)} value={category.category_slug} type="text"/> 
             </div>
             <div className="formInput">
-              <label htmlFor="category Title">SubCategories   :    </label>
+              <label htmlFor="category subcaegories">SubCategories   :    </label>
             </div>
             <div className="subCategories">
               {
@@ -123,20 +124,22 @@ function Categories(props) {
             {
               newSubCategoryTrigger &&
               <div className="addNewCategory">
-                <h3 className="title">Add New Sub-Category</h3>
-                <div className="formInput">
-                  <label htmlFor="category Title">Sub-Category Title  :   </label>
-                  <input  onChange={(e)=>editSubCategory('title',e.target.value)}  value={subcategory.title} type="text"/> 
-                </div>
-                <div className="formInput">
-                  <label htmlFor="category Title">Sub-Category Slug   :   </label>
-                  <input onChange={(e)=>editSubCategory('sub_category_slug',e.target.value)}  value={subcategory.sub_category_slug} type="text"/> 
-                </div>
-                <div className="formInput">
-                  <label htmlFor="category Title">Sub-Category Description   :   </label>
-                  <input  onChange={(e)=>editSubCategory('description',e.target.value)}  value={subcategory.description} type="text"/> 
-                </div>
-                <button className="btn2__primary" onClick={()=>addNewSubCategory()}>Add SubCategory</button>
+                <form >
+                  <h3 className="title">Add New Sub-Category</h3>
+                  <div className="formInput">
+                    <label htmlFor="category Title">Sub-Category Title  :   </label>
+                    <input  placeholder="Sub-Category Title"  onChange={(e)=>editSubCategory('title',e.target.value)}  value={subcategory.title} type="text"/> 
+                  </div>
+                  <div className="formInput">
+                    <label htmlFor="category Title">Sub-Category Slug   :   </label>
+                    <input  placeholder="Sub-Category Slug"  onChange={(e)=>editSubCategory('sub_category_slug',e.target.value)}  value={subcategory.sub_category_slug} type="text"/> 
+                  </div>
+                  <div className="formInput">
+                    <label htmlFor="category Title">Sub-Category Description   :   </label>
+                    <input   placeholder="Sub-Category Description" onChange={(e)=>editSubCategory('description',e.target.value)}  value={subcategory.description} type="text"/> 
+                  </div>
+                  <button className="btn2__primary" onClick={()=>addNewSubCategory()}>Add SubCategory</button>
+                </form>
             </div>
             }
           </div>

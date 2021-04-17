@@ -5,7 +5,7 @@ import {AuthHelper,redirectToUrl} from 'utils/common'
 import {APP_ROUTES} from 'utils/constants'
 import { toast } from 'react-toastify';
 function Login(props) {
-  const {login,loginData,setLoggedIn} = props
+  const {login,loginData,setLoggedIn,defaultAction} = props
   const [loginForm, setLoginForm] = useState({
     username : '',
     password : ''
@@ -16,6 +16,9 @@ function Login(props) {
       setLoggedIn(true)
     }else{
       setLoggedIn(false)
+    }
+    return () => {
+      defaultAction()
     }
   }, [])
   useEffect(() => {

@@ -43,7 +43,7 @@ function Gallery(props) {
   useEffect(() => {
     if(triggers.uploadMedia){
       let temp = config
-      temp['gallery'].push(uploadImageData.data)
+      temp['gallery'].push(uploadImageData.data.link)
       saveData(temp)
       setTriggers({...triggers,uploadMedia : false,fileModal : false})
     }

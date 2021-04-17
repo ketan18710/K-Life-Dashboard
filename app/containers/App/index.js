@@ -16,14 +16,13 @@ import { toast } from 'react-toastify';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import makeSelectApp,{makeSelectConfig, makeSelectImageUpload, makeSelectLogin, makeSelectResetPassword, makeSelectSave} from './selectors';
-import { getData,saveData, saveImage,getLgin, getResetPAssword, resetUploadImage} from './actions'
+import { getData,saveData, saveImage,getLgin, getResetPAssword, resetUploadImage, defaultAction} from './actions'
 import reducer from './reducer';
 import saga from './saga';
 import { Switch, Route } from 'react-router-dom';
 import './style.scss';
-import {DEFAULT_IMAGE_1 as IMG1,DEFAULT_IMAGE_2 as IMG2,API_CONSTANTS,APP_ROUTES,redirectFor} from 'utils/constants'
+import {DEFAULT_IMAGE_1 as IMG1,DEFAULT_IMAGE_2 as IMG2,API_CONSTANTS,APP_ROUTES,redirectFor,user} from 'utils/constants'
 import {AuthHelper,redirectToUrl} from 'utils/common'
-import Dashboard from 'containers/Dashboard/Loadable';
 import Sidebar from 'components/Sidebar';
 import Loader from 'components/Loader'
 import Login from 'components/Login'
@@ -34,6 +33,7 @@ import Gallery from 'components/Dashboard/Gallery'
 import Categories from 'components/Dashboard/Categories'
 import SubCategory from 'components/Dashboard/SubCategory'
 import Product from 'components/Dashboard/Product'
+import Error404 from '../../components/Error404';
 export function App(props) {
   useInjectReducer({ key: 'app', reducer });
   useInjectSaga({ key: 'app', saga });
@@ -112,7 +112,7 @@ export function App(props) {
     },
   })
   const [saveBtnLoader, setSaveBtnLoader] = useState(null)
-  const {userConfig,fetchData,save,saveData,uploadImage,uploadImageData,login,loginData,resetPasswordData,reset} = props
+  const {userConfig,fetchData,save,saveData,uploadImage,uploadImageData,defaultAction,login,loginData,resetPasswordData,reset} = props
   useEffect(() => {
     if(AuthHelper.isAuthenticated()){
       fetchData()
@@ -139,6 +139,7 @@ export function App(props) {
     }else if(status === -1){
       toast.error(data)
       setAppLoader(false)
+      redirectToUrl('/error')
     }
   }, [userConfig.status])
   useEffect(() => {
@@ -211,13 +212,14 @@ export function App(props) {
                 <div id="mainBodyInnerWrapper">
                   <Switch>
                     <Route exact path={APP_ROUTES.DASHBOARD} component={()=><Home saveBtnLoader={saveBtnLoader} uploadImage={(data)=>uploadImage(data)} activeType={activeType} resetUploadImage={()=>resetUploadImage()} setactiveType={(data)=>setactiveType(data)} triggers={triggers} setTriggers={(data)=>setTriggers(data)} saveData={(data)=>saveData(data)} save={save}   uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD} config={config} setConfig={(data)=>setConfig(data)}  />} />
-                    <Route exact path={APP_ROUTES.LOGIN} component={()=><Login setLoggedIn={(val)=>setLoggedIn(val)} login={(data)=>login(data)} loginData={loginData} />} />
+                    <Route exact path={APP_ROUTES.LOGIN} component={()=><Login defaultAction={()=>defaultAction()} setLoggedIn={(val)=>setLoggedIn(val)} login={(data)=>login(data)} loginData={loginData} />} />
                     <Route exact path={APP_ROUTES.RESET_PASSWORD} component={()=><ResetPassword resetPasswordData={resetPasswordData}  reset={(data)=>reset(data)}/>} />
                     <Route exact path={APP_ROUTES.DASHBOARD_GALLERY} component={()=><Gallery saveBtnLoader={saveBtnLoader}  triggers={triggers} setTriggers={(data)=>setTriggers(data)} loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />
                     <Route exact path={APP_ROUTES.CATEGORIES} component={()=><Categories  saveBtnLoader={saveBtnLoader} loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />
                     <Route exact path={APP_ROUTES.DASHBOARD_ABOUTUS} component={()=><AboutUs  saveBtnLoader={saveBtnLoader} loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />
                     <Route exact path={APP_ROUTES.SUB_CATEGORIES} component={()=><SubCategory  saveBtnLoader={saveBtnLoader} loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />
                     <Route exact path={APP_ROUTES.PRODUCT} component={()=><Product productImageType={productImageType} setProductImageType={(data)=>setProductImageType(data)}  triggers={triggers} setTriggers={(data)=>setTriggers(data)}  saveBtnLoader={saveBtnLoader} loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />
+                    <Route component={Error404} />
                   </Switch>
                 </div>
               </div> 
@@ -245,6 +247,7 @@ function mapDispatchToProps(dispatch) {
   return {
     dispatch,
     fetchData: () => dispatch(getData()),
+    defaultAction: () => dispatch(defaultAction()),
     resetUploadImage: () => dispatch(resetUploadImage()),
     saveData: (data) => dispatch(saveData(data)),
     uploadImage: (data) => dispatch(saveImage(data)),

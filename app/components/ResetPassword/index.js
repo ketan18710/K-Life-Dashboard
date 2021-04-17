@@ -1,6 +1,8 @@
 import React,{useState,useEffect} from 'react'
 import './style.scss'
 import Loader from '../Loader/index'
+import { user } from '../../utils/constants'
+import { toast } from 'react-toastify'
 function ResetPassword(props) {
   const {resetPasswordData,reset} = props
   const [loading, setLoading] = useState(null)
@@ -10,8 +12,9 @@ function ResetPassword(props) {
   })
   const [passwordMismatcch, setPasswordMismatcch] = useState(false)
   const resetPasswordFunc = () => {
+    // const { } = user
     if(form.new === form.again){
-      reset({newPassword : form.new})
+      reset({newPassword : form.new, username : user.user})
       setPasswordMismatcch(false)
     }else{
       setPasswordMismatcch(true)
@@ -24,6 +27,11 @@ function ResetPassword(props) {
     }
     if(status === 1){
       setLoading(false)
+      toast.success('Password updated successfully')
+    }else if(status === -1){
+      setLoading(false)
+      toast.error(data)
+
     }
   }, [resetPasswordData])
   

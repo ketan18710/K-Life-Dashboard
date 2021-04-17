@@ -1,3 +1,5 @@
+import { parseJwt } from "./common";
+
 export const RESTART_ON_REMOUNT = '@@saga-injector/restart-on-remount';
 export const DAEMON = '@@saga-injector/daemon';
 export const ONCE_TILL_UNMOUNT = '@@saga-injector/once-till-unmount';
@@ -51,3 +53,4 @@ export const STATUS_CODES = {
   SUCCESS : 200,
   LOGIN_EXPIRED : 401,
 }
+export const user = parseJwt()
