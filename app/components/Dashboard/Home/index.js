@@ -6,9 +6,12 @@ import EditIcon from '../../../images/icons/edit.svg'
 import {Card3 as Card} from 'components/Cards/index'
 import FileUpload from '../../FileUpload/index'
 import Loader from '../../Loader/index'
-import {redirectToUrl} from 'utils/common'
+import {redirectToUrl,compressFile} from 'utils/common'
 import {APP_ROUTES} from 'utils/constants'
 import { add } from 'lodash'
+import { toast } from 'react-toastify'
+import { handleImageUpload } from '../../../utils/common'
+import { NO_IMAGE } from '../../../utils/constants'
 function DashboardHome(props) {
   const {config,uploadImage,uploadImageData,triggers ,setTriggers, activeType, setactiveType,saveData,saveBtnLoader ,setConfig,resetUploadImage} = props
   const [configTemp, setConfigTemp] = useState('')
@@ -262,7 +265,7 @@ function DashboardHome(props) {
                     <div className="product">
                       <Card 
                         title={product.title}
-                        image={product.image}
+                        image={product.image ? product.image : NO_IMAGE}
                         description={product.description}
                         action={()=>redirectToUrl(APP_ROUTES.PRODUCT_ALIAS(product.category_slug,product.sub_category_slug,product.model_id))}
                         actionText="Edit"

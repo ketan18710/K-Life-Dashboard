@@ -11,7 +11,7 @@ function Sidebar() {
       <p className="menuItem" onClick={()=>redirectToUrl(APP_ROUTES.DASHBOARD_ABOUTUS)} >ABOUT US</p>
       <p className="menuItem" onClick={()=>redirectToUrl(APP_ROUTES.DASHBOARD_GALLERY)} >GALLERY</p>
       <p className="menuItem" onClick={()=>redirectToUrl(APP_ROUTES.CATEGORIES)} >PRODUCTS</p>
-      <p className="menuItem" onClick={()=>redirectToUrl(APP_ROUTES.RESET_PASSWORD)} >RESET_PASSWORD</p>
+      <p className="menuItem" onClick={()=>redirectToUrl(APP_ROUTES.RESET_PASSWORD)} >RESET PASSWORD</p>
       <p className="menuItem last" onClick={()=>AuthHelper.logout()} >LOGOUT</p>
     </div>
   )

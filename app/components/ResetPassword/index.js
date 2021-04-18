@@ -3,6 +3,7 @@ import './style.scss'
 import Loader from '../Loader/index'
 import { user } from '../../utils/constants'
 import { toast } from 'react-toastify'
+import { parseJwt } from '../../utils/common'
 function ResetPassword(props) {
   const {resetPasswordData,reset} = props
   const [loading, setLoading] = useState(null)
@@ -10,11 +11,17 @@ function ResetPassword(props) {
     new : '',
     again : ''
   })
+  console.log(user,'user')
+  const getUsername = () => {
+    const {user} = parseJwt()
+    return user && user
+  }
+  
   const [passwordMismatcch, setPasswordMismatcch] = useState(false)
   const resetPasswordFunc = () => {
     // const { } = user
     if(form.new === form.again){
-      reset({newPassword : form.new, username : user.user})
+      reset({newPassword : form.new, username : getUsername()})
       setPasswordMismatcch(false)
     }else{
       setPasswordMismatcch(true)

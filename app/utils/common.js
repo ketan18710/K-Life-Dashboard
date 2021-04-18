@@ -1,5 +1,6 @@
 import history from 'utils/history';
 import {APP_ROUTES,AUTH_TOKEN} from 'utils/constants';
+import imageCompression from 'browser-image-compression';
 export const redirectToUrl = (endpoint = null) => {
   endpoint ? history.push(endpoint) : null;
 }
@@ -27,13 +28,16 @@ export const AuthHelper = {
 }
 export const parseJwt = ()=>{
   const token = localStorage.getItem(AUTH_TOKEN)
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-
-  return JSON.parse(jsonPayload);
+  if(token){
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+  
+    return JSON.parse(jsonPayload);
+  }
+  return token
 };
 export const getYTVideoCode = (video) => {
   let video_id = video.split('v=')[1];
@@ -43,3 +47,71 @@ export const getYTVideoCode = (video) => {
   }
   return video_id
 }
+ 
+function file2base64(file) {
+  // debugger
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    var MyBlob = new Blob([file], {type : 'text/plain'});
+    console.log(' MyBlob instanceof Blob', MyBlob instanceof Blob)
+    // debugger
+    reader.readAsDataURL(MyBlob);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
+function base642file(dataurl, filename) {
+  // debugger
+  var arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
+}
+
+async function compressFile(file) {
+  let stringifiedFile = '',imageCompress = '',selectedFile=''
+  await file2base64(file).then((data) => (stringifiedFile = data));
+  console.logI
+  debugger
+  await imageCompress
+    .compressFile(stringifiedFile, -1, 50, 50)
+    .then((result) => {
+      stringifiedFile = result;
+      selectedFile = base642file(
+        stringifiedFile,
+        selectedFile.name
+      );
+      return selectedFile
+    });
+}
+async function handleImageUpload(imageFile,suc) {
+
+  // var imageFile = event.target.files[0];
+  console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+  console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+
+  var options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true
+  }
+  try {
+    const compressedFile = await imageCompression(imageFile, options);
+    console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+    console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+    await console.log(compressFile())
+  } catch (error) {
+    debugger
+    console.log(error);
+  }
+}
+export { compressFile,handleImageUpload}

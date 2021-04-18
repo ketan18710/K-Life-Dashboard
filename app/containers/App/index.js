@@ -74,13 +74,14 @@ export function App(props) {
     'gallery' : ['https://image.freepik.com/free-vector/certificate-icon-with-ribbon-medal-flat-design_115464-65.jpg','https://image.freepik.com/free-vector/certificate-icon-with-ribbon-medal-flat-design_115464-65.jpg','https://image.freepik.com/free-vector/certificate-icon-with-ribbon-medal-flat-design_115464-65.jpg','https://image.freepik.com/free-vector/certificate-icon-with-ribbon-medal-flat-design_115464-65.jpg'],
     'categories' : []
   })
-  const [appLoader, setAppLoader] = useState(null)
+  const [appLoader, setAppLoader] = useState({val : null})
   const [loggedIn, setLoggedIn] = useState(null)
   const [saving, setSaving] = useState(null)
   const [loader, setLoader] = useState({
     gallery : null,
     aboutUs : null,
-    subCategory : null
+    subCategory : null,
+    login : null
   })
   const [productImageType, setProductImageType] = useState({
     carrousel : false,
@@ -117,7 +118,7 @@ export function App(props) {
     if(AuthHelper.isAuthenticated()){
       fetchData()
       setLoggedIn(true)
-      // setAppLoader(true)
+      setAppLoader({...appLoader, val : true})
     }else{
       // toast.error('login first')
       redirectToUrl(APP_ROUTES.LOGIN)
@@ -135,25 +136,25 @@ export function App(props) {
     if(status === 1){
       let parsed = JSON.parse(data)
       setConfig(parsed)
-      setAppLoader(false)
+      setAppLoader({...appLoader, val : false})
     }else if(status === -1){
       toast.error(data)
-      setAppLoader(false)
+      setAppLoader({...appLoader, val : false})
       redirectToUrl('/error')
     }
   }, [userConfig.status])
+  
+  console.table(loginData)
   useEffect(() => {
     const {status,data} = save
     if(status === 0){
-
-      setSaveBtnLoader(true)
-    }
-    if(status === 1){
+      setAppLoader({...appLoader, val : true})
+    }else if(status === 1){
       setConfig(data)
-      setSaveBtnLoader(false)
+      setAppLoader({...appLoader, val : false})
       toast.success('Saved successfully')
     }else{
-      setSaveBtnLoader(false)
+      setAppLoader({...appLoader, val : false})
       toast.error(data)
     }
   }, [save.status])
@@ -181,7 +182,7 @@ export function App(props) {
   return (
     <>
       {
-        appLoader ? 
+        appLoader.val? 
         <Loader />
         :
         <div id="AppContainer">
@@ -212,7 +213,7 @@ export function App(props) {
                 <div id="mainBodyInnerWrapper">
                   <Switch>
                     <Route exact path={APP_ROUTES.DASHBOARD} component={()=><Home saveBtnLoader={saveBtnLoader} uploadImage={(data)=>uploadImage(data)} activeType={activeType} resetUploadImage={()=>resetUploadImage()} setactiveType={(data)=>setactiveType(data)} triggers={triggers} setTriggers={(data)=>setTriggers(data)} saveData={(data)=>saveData(data)} save={save}   uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD} config={config} setConfig={(data)=>setConfig(data)}  />} />
-                    <Route exact path={APP_ROUTES.LOGIN} component={()=><Login defaultAction={()=>defaultAction()} setLoggedIn={(val)=>setLoggedIn(val)} login={(data)=>login(data)} loginData={loginData} />} />
+                    <Route exact path={APP_ROUTES.LOGIN} component={()=><Login defaultAction={()=>defaultAction()} setLoggedIn={(val)=>setLoggedIn(val)} login={(data)=>login(data)} loginData={loginData}   loader={loader} setLoader={(data)=>setLoader(data)}  />} />
                     <Route exact path={APP_ROUTES.RESET_PASSWORD} component={()=><ResetPassword resetPasswordData={resetPasswordData}  reset={(data)=>reset(data)}/>} />
                     <Route exact path={APP_ROUTES.DASHBOARD_GALLERY} component={()=><Gallery saveBtnLoader={saveBtnLoader}  triggers={triggers} setTriggers={(data)=>setTriggers(data)} loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />
                     <Route exact path={APP_ROUTES.CATEGORIES} component={()=><Categories  saveBtnLoader={saveBtnLoader} loader={loader} setLoader={(data)=>setLoader(data)}  saving={saving} setSaving={(data)=>setSaving(data)} uploadImage={(data)=>uploadImage(data)} saveData={(data)=>saveData(data)} save={save} setConfig={(data)=>setConfig(data)}  uploadImageData={uploadImageData} redirectFor={redirectFor.DASHBOARD_GALLERY} config={config} />} />

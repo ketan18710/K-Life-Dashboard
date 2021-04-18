@@ -4,28 +4,18 @@ import './style.scss'
 function index(props) {
   const [open, setOpen] = useState(null)
   const [media, setMedia] = useState(null)
-  const {onChangeMediaFunc,submitMediaFormFunc,close} = props
+  const {onChangeMediaFunc,submitMediaFormFunc,close,uploadDoc} = props
   useEffect(() => {
     setOpen(props.open)
   }, [props.open])
-
-//   const onChangeMediaFunc = (e)=>{
-//     const selectedFile = e.target.files[0];
-//     setMedia({"image" : selectedFile});
-//   }
-//   const submitMediaFormFunc = ()=>{
-//     const formData = new FormData()
-//     formData.append('image',media.image)
-//     formData.append('group',PREVIEW_DESIGN)
-//     console.log(formData)
-//     props.storeMedia(dataToSend)
-// }
   return (
     open &&
     <div className="fileUploadWrapper">
       <div className="modal">
+        <h3 className="title">Upload {!uploadDoc ? '   Image' : '   Document'}</h3>
+        <p>Types allowed  :  {!uploadDoc ? "   .jpeg,.png": '   .pdf'}  </p>
         <div className="uploadImage">
-          <input type="file" onChange={(e)=>onChangeMediaFunc(e)} name="input_file" id="fileInput"/>
+          <input type="file" accept={!uploadDoc ? ".jpeg,.png": '.pdf'} onChange={(e)=>onChangeMediaFunc(e)} name="input_file" id="fileInput"/>
         </div>
         <div className="actions">
           <button className="btn1__secondary" onClick={()=>close()}>Cancel</button>

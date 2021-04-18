@@ -15,16 +15,18 @@ function SubCategory(props) {
   const [subcategory, setSubcategory] = useState(null)
   const [subcategoryIndex, setSubcategoryIndex] = useState(null)
   const [addProdTrigger, setAddProdTrigger] = useState(null)
+  const [prodValidation, setProdValidation] = useState({title : null, model_id : null})
+  const [subValidation, setsubValidation] = useState({title : null, slug : null})
   const tinymce1 = useRef(null)
   const newProdVals = {
-    title : 'Prodcut Name',
+    title : '',
     isNew : false,
     latest : false,
-    model_id : 'model_Id',
+    model_id : '',
     images : [],
     description : ``,
     features : '',
-    video : 'video url',
+    video : '',
     manuals : [],
     accessories : {image : '',data : ''},
   }
@@ -44,35 +46,55 @@ function SubCategory(props) {
   const editSubCategory = (type,val) => {
     setSubcategory({...subcategory,[type] : val})
   }
-  useEffect(() => {
-    console.log(subcategory,'subcategory')
-  }, [subcategory])
   const removeProd = (index) => {
     let temp = subcategory.products
     temp.splice(index,1)
     setSubcategory({...subcategory,products : temp})
   }
   const saveSubCategoryChanges = () => {
-    let config_temp = config
-    config_temp['categories'][categoryIndex]['subCategories'][subcategoryIndex] = subcategory
-    // setConfig({...config,categories : config_temp})
-    saveData(config_temp)
+    let validate = subValidation
+    if(!subcategory.title || subcategory.title.length<=0){
+      validate.title = 'Add a Title for Sub-Category'
+    }else{
+      validate.title = null
+    }
+    if(!subcategory.sub_category_slug || subcategory.sub_category_slug.length<=0){
+      validate.slug = 'Add a Slug for Sub-Category'
+    }else{
+      validate.slug = null
+    }
+    setsubValidation({...subValidation,title : validate.title, slug : validate.slug})
+    if(!subValidation.title && !subValidation.slug){
+      let config_temp = config
+      config_temp['categories'][categoryIndex]['subCategories'][subcategoryIndex] = subcategory
+      saveData(config_temp)
+    }
 
   }
 
   // console.log({subcategory})
   const addProd = () => {
-    // subcategory.products.push(newProd)
-    // let categ_new = categories
-    // categ_new[categoryIndex].subCategories[subcategoryIndex] = subcategory 
-    // setConfig({...config,categories : categ_new})
     let newProd = newProdData
-    // newProd.description = tinymce1.current.editor.getContent()
-    // debugger
-    let temp = subcategory.products
-    temp.push(newProd)
-    setSubcategory({...subcategory,products : temp})
-    setAddProdTrigger(false)
+    let validate = prodValidation
+    if(!newProd.title || newProd.title.length<=0){
+      validate.title = 'Add a Title for Product'
+    }else{
+      validate.title = null
+    }
+    if(subcategory.products.find(prod=>prod.model_id === newProd.model_id)){
+      validate.model_id = 'Model Id should be unique'
+    }else if(newProd.model_id.length<=0 || !newProd.model_id){
+      validate.model_id = 'Model Id required'
+    }else{
+      validate.model_id = null
+    }
+    setProdValidation({...prodValidation,title : validate.title, model_id : validate.model_id})
+    if(!validate.title && !validate.model_id){
+      let temp = subcategory.products
+      temp.push(newProd)
+      setSubcategory({...subcategory,products : temp})
+      setAddProdTrigger(false)
+    }
   }
   
   return (
@@ -86,13 +108,15 @@ function SubCategory(props) {
       <div className="SubCategory">
         <div className="header">
           <div className="formInput">
-            <input onChange={(e)=>editSubCategory('title',e.target.value)} className="title" type="text"  value={subcategory && subcategory.title}/>
+            <input placeholder="Subcategory title" onChange={(e)=>editSubCategory('title',e.target.value)} className="title" type="text"  value={subcategory && subcategory.title}/>
+            { subValidation.title && <p className="formErrorMsg">{subValidation.title}</p> }
           </div>
           <button onClick={()=>saveSubCategoryChanges()} className="btn1__primary">Save</button>
         </div>
         <div className="formInput">
           <label htmlFor="slug">Slug</label>
-          <input onChange={(e)=>editSubCategory('sub_category_slug',e.target.value)} type="text"  value={subcategory && subcategory.sub_category_slug}/>
+          <input disabled placeholder="Subcategory slug"  onChange={(e)=>editSubCategory('sub_category_slug',e.target.value)} type="text"  value={subcategory && subcategory.sub_category_slug}/>
+          { subValidation.slug && <p className="formErrorMsg">{subValidation.slug}</p> }
         </div>
         <div className="formInput">
           <label htmlFor="description">Description</label>
@@ -127,44 +151,21 @@ function SubCategory(props) {
           <div className="addProd">
             <div className="formInput">
               <label htmlFor="Product Title">Product Title</label>
-              <input onChange={(e)=>setNewProdData({...newProdData,title : e.target.value})} type="text"  value={newProdData.title}/>
+              <input placeholder="Prodcut Name"  onChange={(e)=>setNewProdData({...newProdData,title : e.target.value})} type="text"  value={newProdData.title}/>
+              { prodValidation.title && <p className="formErrorMsg">{prodValidation.title}</p> }
             </div>
             <div className="formInput">
               <label htmlFor="Model Id">Model Id:</label>
-              <input onChange={(e)=>setNewProdData({...newProdData,model_id : e.target.value})} type="text"  value={newProdData.model_id}/>
+              <input placeholder="Model id"  onChange={(e)=>setNewProdData({...newProdData,model_id : e.target.value})} type="text"  value={newProdData.model_id}/>
+              { prodValidation.model_id && <p className="formErrorMsg">{prodValidation.model_id}</p> }
             </div>
             <div className="formInput">
-              <label htmlFor="Product Description">Product Description</label>
+              <label htmlFor="Product Description">Product Description :</label>
               {/* <textarea onChange={(e)=>setNewProdData({...newProdData,description : e.target.value})} type="text"  value={newProdData.description}></textarea> */}
-              <textarea name="description"  onChange={(e)=>setNewProdData({...newProdData,description : e.target.value})}  value={newProdData.description} id="" cols="30" rows="10"></textarea>
-              {/* <Editor
-                initialValue={newProdData.description} 
-                apiKey={EMAIL_EDITOR_API_KEY}
-                ref = {tinymce1}
-                init={{
-                  height: 200,
-                  menubar: false,
-                  selector : 'h1',
-                  forced_root_block : "", 
-                  force_br_newlines : true,
-                  force_p_newlines : false,
-                  // onchange_callback : onChangeFunc,
-                  plugins: [
-                    'advlist autolink lists link ',
-                    'searchreplace  code',
-                    'paste'
-                  ],
-                  noneditable_editable_class: 'mceEditable',
-                  noneditable_noneditable_class: 'mceNonEditable',
-                  fontsize_formats:"1pt 2pt 3pt 4pt 5pt 6pt 7pt 8pt 9pt 10pt 11pt 12pt 14pt 18pt 24pt 30pt 36pt 48pt 60pt 72pt 96pt",
-                  toolbar1:'fontsizeselect| bold italic | undo redo | bullist numlist outdent indent ',
-                  
-                }}
-                // onChange={(e)=>{setHtml(e.target.getContent());}}
-              /> */}
+              <textarea name="description" placeholder="Product Description"  onChange={(e)=>setNewProdData({...newProdData,description : e.target.value})}  value={newProdData.description} id="" cols="30" rows="10"></textarea>
             </div>
             <div className="formInput">
-              <button onClick={()=>{addProd();}} className="btn2__primary">Add Product</button>
+              <button  onClick={()=>{addProd();}} className="btn2__primary">Add Product</button>
             </div>
             
           </div>

@@ -29,27 +29,27 @@
       outline: none;
     }
   }
-  .formInput{
-    margin: 2rem 0;
-    display: flex;
-    flex-direction: column;
-    label{
-      font-size: 28px;
-      font-weight: 600;
-      color: $prim-highlight;
-      margin-bottom: 1rem;
-    }
-    input{
-      font-size: 22px;
-      font-weight: 600;
-      border: none;
-      color: $darkGrey;
-      height: 30px;
-      &:focus,&:active,&:hover{
-        outline: none;
-      }
-    }
-  }
+  // .formInput{
+  //   margin: 2rem 0;
+  //   display: flex;
+  //   flex-direction: column;
+  //   label{
+  //     font-size: 28px;
+  //     font-weight: 600;
+  //     color: $prim-highlight;
+  //     margin-bottom: 1rem;
+  //   }
+  //   input{
+  //     font-size: 22px;
+  //     font-weight: 600;
+  //     border: none;
+  //     color: $darkGrey;
+  //     height: 30px;
+  //     &:focus,&:active,&:hover{
+  //       outline: none;
+  //     }
+  //   }
+  // }
   .formGroup{
     @include centreAlign;
     gap: 3rem;
@@ -120,13 +120,6 @@
           cursor: pointer;
         }
       }
-    }
-  }
-}
-.formInput{
-  input{
-    &::placeholder{
-      color: red;
     }
   }
 }

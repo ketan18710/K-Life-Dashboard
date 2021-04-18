@@ -3,14 +3,14 @@
   padding: 2rem 1rem;
   .title{
     font-size: 36px;
-    font-weight: 600;
+    font-weight: $wt-reg;
     color: $darkGrey;
   }
   .header{
     @include spaceBetween;
     .title{
       font-size: 44px;
-      font-weight: 800;
+      font-weight: $wt-extraBold;
       color: $prim-highlight;
     }
     button{

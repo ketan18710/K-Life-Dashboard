@@ -1,34 +1,6 @@
 @import '../../../styles/base/main.scss';
 .Product{
-  .formInput{
-    margin: 2rem 0;
-    display: flex;
-    flex-direction: column;
-    label{
-      font-size: 28px;
-      font-weight: 800;
-      color: $prim-highlight;
-      margin-bottom: 1rem;
-    }
-    input{
-      font-size: 22px;
-      font-weight: 600;
-      border: none;
-      color: $darkGrey;
-      &:focus,&:active,&:hover{
-        outline: none;
-      }
-    }
-    .title{
-      font-size: 48px;
-      font-weight: 800;
-      color: $prim-highlight; 
-      line-height: 20px;
-    }
-    button{
-      width: fit-content;
-    }
-  }
+ 
   .formInputSingleRow{
     flex-direction: row;
     label,input,textarea {
@@ -36,6 +8,12 @@
     }
     input{
       margin-left: 1rem;
+      min-width: 70%;
+    }
+    input[type=checkbox]{
+      min-width: unset;
+      width: 20px;
+      height: 20px;
     }
   }
   .formInputChoiceTick{
@@ -55,6 +33,8 @@
         @include centreAlign;
         font-size: 18px;
         text-decoration: none;
+        width: fit-content;
+        padding: 6px;
       }
     }
   }

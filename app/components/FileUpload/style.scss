@@ -14,18 +14,28 @@
     flex-direction: column;
     width: 40%;
     min-height: 300px;
-    padding: 6rem 4rem;
+    padding: 2rem;
+    h3{
+      font-size: 36px;
+      font-weight: $wt-light;
+      color: $prim-highlight;
+      margin: 0rem 0 0.2rem 0;
+    }
+    p{
+      font-size: 16px;
+      font-weight: $wt-bold;
+      color: $red;
+      margin: 0 0 1rem 0;
+
+    }
     .uploadImage,.actions{
       width: 100%;
+      @include centreAlign;
+      margin-top: 2rem;
     }
     .actions{ 
-      display: flex;
-      justify-content: flex-end;
-      button{
-        &:last-of-type{
-          margin: 0 20% 0 2%;
-        }
-      }
+      // margin-top: 2rem;
+      gap: 2rem;
     }
   }
 }

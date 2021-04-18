@@ -132,10 +132,9 @@ function Product(props) {
       }
     }
   }
-  
   return (
     <>
-      <FileUpload open={triggers.fileModal} close={()=>setTriggers({...triggers,fileModal : false})}   onChangeMediaFunc={(e)=>onChangeMediaFunc(e)} submitMediaFormFunc={()=>submitMediaFormFunc()} />
+      <FileUpload uploadDoc={productImageType.file ? true : false} open={triggers.fileModal} close={()=>setTriggers({...triggers,fileModal : false})}   onChangeMediaFunc={(e)=>onChangeMediaFunc(e)} submitMediaFormFunc={()=>submitMediaFormFunc()} />
         {
           saveBtnLoader || triggers.fileModal
           ?
@@ -152,7 +151,7 @@ function Product(props) {
             </div>
             <div className="formInput formInputSingleRow">
               <label htmlFor="slug">Model Id : </label>
-              <input onChange={(e)=>setProduct({...product,model_id: e.target.value})} type="text"  value={product && product.model_id}/>
+              <input disabled onChange={(e)=>setProduct({...product,model_id: e.target.value})} type="text"  value={product && product.model_id}/>
             </div>
             <div className="formInput">
               <label htmlFor="Product Description">Product Description</label>
@@ -187,7 +186,7 @@ function Product(props) {
             </div>
             <div className="formInput formInputSingleRow">
               <label htmlFor="slug">Product Video Link  </label>
-              <input onChange={(e)=>setProduct({...product,video: e.target.value})} type="text"  value={product && product.video}/>
+              <input placeholder="Video URL (Youtube)" onChange={(e)=>setProduct({...product,video: e.target.value})} type="text"  value={product && product.video}/>
             </div>
             <div className="manuals">
               <div className="formInput ">
@@ -209,7 +208,7 @@ function Product(props) {
                 {
                   product && product.images.map((image,index)=><EditImage src={image}  edit={false} close={()=>deleteImage(index)}/>)
                 }
-                <div onClick={()=>{ const temp = createSaveData();setConfig({...config,categories : temp['categories']}); setProductImageType({...productImageType,carrousel : true}) ;setTriggers({...triggers,fileModal : true})}} className="editableImage editableImageAdd">
+                <div onClick={()=>{ const temp = createSaveData();setConfig({...config,categories : temp['categories']}); setProductImageType({...productImageType,carrousel : true,file : false}) ;setTriggers({...triggers,fileModal : true})}} className="editableImage editableImageAdd">
                   <img className="addIcon" src={AddIcon} alt="add icon"/>
                 </div>
               </div>

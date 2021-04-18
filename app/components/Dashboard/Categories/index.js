@@ -9,14 +9,14 @@ import Error404 from '../../Error404'
 function Categories(props) {
   console.log(props,'categoryProps')
   const newCategory = {
-    title : 'Category Title',
-    category_slug : 'Category Slug',
+    title : '',
+    category_slug : '',
     subCategories : [],
   }
   const newSubCategory = {
-    title : 'SubCategory Title',
-    sub_category_slug : 'SubCategory Slug',
-    description : 'description',
+    title : '',
+    sub_category_slug : '',
+    description : '',
     products : [],
   }
   const [category, setCategory] = useState(null)
@@ -24,20 +24,55 @@ function Categories(props) {
   const [categoryIndex, setCategoryIndex] = useState(null)
   const [newCategoryTrigger, setNewCategoryTrigger] = useState(null)
   const [newSubCategoryTrigger, setNewSubCategoryTrigger] = useState(null)
+  const [newCategValidate, setnewCategValidate] = useState({title : null,slug : null})
+  const [newSubCategValidate, setnewSubCategValidate] = useState({title : null,slug : null})
   const {config,setConfig,saveData,saveBtnLoader} = props
   let config_temp = config
   const {categories} = config_temp && config_temp
   const addNewCategory = () => {
-    let config_temp = config.categories
-    config_temp.push(category)
-    setConfig({...config,categories : config_temp})
+    let validate = newCategValidate
+    if(!category.title || category.title.length<=0){
+      validate.title = 'Add a Title for Product'
+    }else{
+      validate.title = null
+    }
+    if(config.categories.find(cat=>cat.category_slug === category.category_slug)){
+      validate.slug = 'Category slug should be unique'
+    }else if(!category.category_slug || category.category_slug.length<=0){
+      validate.slug = 'Category slug required'
+    }else{
+      validate.slug = null
+    }
+    setnewCategValidate({...newCategValidate,title : validate.title, slug : validate.slug})
+    if(!validate.slug && !validate.title){
+      let config_temp = config.categories
+      config_temp.push(category)
+      setConfig({...config,categories : config_temp})
+    }
   }
-  console.log({category,subcategory})
+  console.log({newCategValidate})
   const addNewSubCategory = () => {
-    let temp = category.subCategories
-    temp.push(subcategory)
-    setCategory({...category,subCategories : temp})
-    setNewSubCategoryTrigger(false)
+    let validate = newSubCategValidate
+    if(!subcategory.title || subcategory.title.length<=0){
+      validate.title = 'Add a Title for Product'
+    }else{
+      validate.title = null
+    }
+    if(category.subCategories.find(sub=>sub.sub_category_slug === subcategory.sub_category_slug)){
+      validate.slug = 'Sub-category slug should be unique'
+    }else if(!category.category_slug || category.category_slug.length<=0){
+      validate.slug = 'Sub-category slug required'
+    }else{
+      validate.slug = null
+    }
+    setnewSubCategValidate({...newSubCategValidate,title : validate.title, slug : validate.slug})
+    if(!validate.slug && !validate.title){
+      let temp = category.subCategories
+      temp.push(subcategory)
+      setCategory({...category,subCategories : temp})
+      setNewSubCategoryTrigger(false)
+
+    }
   }
   const editCategory = (type,val) => {
     setCategory({...category,[type] : val})
@@ -99,7 +134,7 @@ function Categories(props) {
             </div>
             <div className="formInput">
               <label htmlFor="category slug">Category Slug   :   </label>
-              <input  placeholder="Category Slug"  onChange={(e)=>editCategory('category_slug',e.target.value)} value={category.category_slug} type="text"/> 
+              <input disabled placeholder="Category Slug"  onChange={(e)=>editCategory('category_slug',e.target.value)} value={category.category_slug} type="text"/> 
             </div>
             <div className="formInput">
               <label htmlFor="category subcaegories">SubCategories   :    </label>
@@ -124,22 +159,23 @@ function Categories(props) {
             {
               newSubCategoryTrigger &&
               <div className="addNewCategory">
-                <form >
-                  <h3 className="title">Add New Sub-Category</h3>
-                  <div className="formInput">
-                    <label htmlFor="category Title">Sub-Category Title  :   </label>
-                    <input  placeholder="Sub-Category Title"  onChange={(e)=>editSubCategory('title',e.target.value)}  value={subcategory.title} type="text"/> 
+                <h3 className="title">Add New Sub-Category</h3>
+                <div className="formInput">
+                  <label htmlFor="category Title">Sub-Category Title  :   </label>
+                  <input  placeholder="Sub-Category Title"  onChange={(e)=>editSubCategory('title',e.target.value)}  value={subcategory.title} type="text"/> 
+                  { newSubCategValidate.title && <p className="formErrorMsg">{newSubCategValidate.title}</p> }         
+                </div>
+                <div className="formInput">
+                  <label htmlFor="category Title">Sub-Category Slug   :   </label>
+                  <input  placeholder="Sub-Category Slug"  onChange={(e)=>editSubCategory('sub_category_slug',e.target.value)}  value={subcategory.sub_category_slug} type="text"/> 
+                  { newSubCategValidate.slug && <p className="formErrorMsg">{newSubCategValidate.slug}</p> }               
                   </div>
-                  <div className="formInput">
-                    <label htmlFor="category Title">Sub-Category Slug   :   </label>
-                    <input  placeholder="Sub-Category Slug"  onChange={(e)=>editSubCategory('sub_category_slug',e.target.value)}  value={subcategory.sub_category_slug} type="text"/> 
-                  </div>
-                  <div className="formInput">
-                    <label htmlFor="category Title">Sub-Category Description   :   </label>
-                    <input   placeholder="Sub-Category Description" onChange={(e)=>editSubCategory('description',e.target.value)}  value={subcategory.description} type="text"/> 
-                  </div>
-                  <button className="btn2__primary" onClick={()=>addNewSubCategory()}>Add SubCategory</button>
-                </form>
+                <div className="formInput">
+                  <label htmlFor="category Title">Sub-Category Description   :   </label>
+                  <textarea   cols="30" rows="3" placeholder="Sub-Category Description" onChange={(e)=>editSubCategory('description',e.target.value)}  value={subcategory.description} type="text"></textarea> 
+                </div>
+                <button className="btn2__primary" onClick={()=>addNewSubCategory()}>Add SubCategory</button>
+              
             </div>
             }
           </div>
@@ -150,11 +186,13 @@ function Categories(props) {
             <h3 className="title">Add New Category</h3>
             <div className="formInput">
               <label htmlFor="category Title">Category Title  :   </label>
-              <input value={category.title} onChange={(e)=>editCategory('title',e.target.value)} type="text"/> 
+              <input placeholder="Category Title" value={category.title} onChange={(e)=>editCategory('title',e.target.value)} type="text"/> 
+              { newCategValidate.title && <p className="formErrorMsg">{newCategValidate.title}</p> }               
             </div>
             <div className="formInput">
-              <label htmlFor="category Title">Category Slug   :   </label>
-              <input value={category.category_slug} onChange={(e)=>editCategory('category_slug',e.target.value)}  type="text"/> 
+              <label htmlFor="category Slug">Category Slug   :   </label>
+              <input placeholder="Category Slug"  value={category.category_slug} onChange={(e)=>editCategory('category_slug',e.target.value)}  type="text"/> 
+              { newCategValidate.slug && <p className="formErrorMsg">{newCategValidate.slug}</p> }               
             </div>
             <button className="btn2__primary"  onClick={()=>addNewCategory()}>ADD</button>
           </div>

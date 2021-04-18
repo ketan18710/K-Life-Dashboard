@@ -26,10 +26,10 @@
   }
   .menuItem{
     font-size: 24px;
-    font-weight: 600;
+    font-weight: $wt-reg;
     width: 100%;
     text-align: center;
-    padding-right: 2rem;
+    // padding-right: 2rem;
     color: $white;
     margin: 14px auto;
     cursor: pointer;

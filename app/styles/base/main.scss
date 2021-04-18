@@ -1,9 +1,15 @@
 @import './mixins.scss';
 @import './colors.scss';
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap');   
+$wt-light : 300;
+$wt-reg : 400;
+$wt-bold : 700;
+$wt-extraBold : 900;
 .btn1__primary{
   width: 100px;
   min-width: 100px;
   height: 30px ;
+  font-weight: $wt-bold;
   min-height: 30px ;
   border: 1px solid #00a0a1;
   border-radius: 4px;
@@ -24,6 +30,7 @@
   min-width: 100px;
   height: 30px ;
   min-height: 30px ;
+  font-weight: $wt-bold;
   border: 1px solid #00a0a1;
   border-radius: 4px;
   background-color: #fff; 
@@ -40,6 +47,7 @@
   min-width: 100px;
   height: 30px ;
   min-height: 30px ;
+  font-weight: $wt-bold;
   border: 1px solid #151f6d;
   border-radius: 4px;
   background-color: #151f6d; 
@@ -55,6 +63,7 @@
   min-width: 100px;
   height: 30px ;
   min-height: 30px ;
+  font-weight: $wt-bold;
   border: 1px solid #151f6d;
   border-radius: 4px;
   background-color: #fff; 
@@ -67,3 +76,12 @@
   }
 }
 $tablet : 1100px;
+
+
+
+
+
+// @font-face {
+//   font-family: 'Merriweather', serif;
+//   src: url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap');
+// };

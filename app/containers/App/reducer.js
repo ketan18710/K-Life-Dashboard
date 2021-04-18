@@ -37,6 +37,14 @@ const appReducer = (state = initialState,  { type, payload }) =>
       case DEFAULT_ACTION:
         draft.login.status = API_CONSTANTS.init;
         draft.login.data = null;
+        draft.config.status = API_CONSTANTS.init;
+        draft.config.data = null;
+        draft.save.status = API_CONSTANTS.init;
+        draft.save.data = null;
+        draft.imageUpload.status = API_CONSTANTS.init;
+        draft.imageUpload.data = null;
+        draft.reset.status = API_CONSTANTS.init;
+        draft.reset.data = null;
         break;
       case RESET_UPLOAD_IMAGE : {
         draft.imageUpload.status = API_CONSTANTS.init;

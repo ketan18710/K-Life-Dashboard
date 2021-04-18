@@ -12,7 +12,7 @@ export function defaultAction() {
   };
 }
 export const resetUploadImage = () => {
-  debugger
+  // debugger
   return({
     type: RESET_UPLOAD_IMAGE,
   })
