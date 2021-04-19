@@ -37,7 +37,7 @@ function TextEditor (props) {
             noneditable_noneditable_class: 'mceNonEditable',
             fontsize_formats:"1pt 2pt 3pt 4pt 5pt 6pt 7pt 8pt 9pt 10pt 11pt 12pt 14pt 18pt 24pt 30pt 36pt 48pt 60pt 72pt 96pt",
             toolbar1:' formatselect fontsizeselect| bold italic | alignleft aligncenter alignright | undo redo | bullist numlist outdent indent   ',
-            toolbar2 : 'forecolor backcolor | image | link | code | insertdatetime |  preview | searchreplace | blockquote ',
+            toolbar2 : 'forecolor backcolor| link | code | insertdatetime |  preview | searchreplace | blockquote ',
             
           }}
           // onChange={(e)=>{setHtml(e.target.getContent());}}

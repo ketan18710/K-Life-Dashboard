@@ -17,6 +17,7 @@ function Product(props) {
   const [fileModalTrigger, setFileModalTrigger] = useState(null)
   const [productIndex, setProductIndex] = useState(null)
   const [media, setMedia] = useState(null)
+  const [initIndex, setInitIndex] = useState(null)
   const [imageType, setImageType] = useState({
     carrousel : false,
     accessorries : false,
@@ -132,6 +133,15 @@ function Product(props) {
       }
     }
   }
+  const handleDrop = (e,newIndex) => {
+    let prevIndex = e.dataTransfer.getData('prevIndex')
+    let images = product && product.images
+    let temp = images[prevIndex]
+    images[prevIndex] = images[newIndex]
+    images[newIndex] = temp
+    setProduct({...product,images : images})
+  }
+  
   return (
     <>
       <FileUpload uploadDoc={productImageType.file ? true : false} open={triggers.fileModal} close={()=>setTriggers({...triggers,fileModal : false})}   onChangeMediaFunc={(e)=>onChangeMediaFunc(e)} submitMediaFormFunc={()=>submitMediaFormFunc()} />
@@ -206,7 +216,7 @@ function Product(props) {
               </div>
               <div className="products">
                 {
-                  product && product.images.map((image,index)=><EditImage src={image}  edit={false} close={()=>deleteImage(index)}/>)
+                  product && product.images.map((image,index)=><div draggable onDragOver={(e)=>e.preventDefault()} onDrop={(e)=>handleDrop(e,index)} onDragStart={(e)=>{e.dataTransfer.setData('prevIndex',index)}}><EditImage  src={image}  edit={false} close={()=>deleteImage(index)}/></div>)
                 }
                 <div onClick={()=>{ const temp = createSaveData();setConfig({...config,categories : temp['categories']}); setProductImageType({...productImageType,carrousel : true,file : false}) ;setTriggers({...triggers,fileModal : true})}} className="editableImage editableImageAdd">
                   <img className="addIcon" src={AddIcon} alt="add icon"/>

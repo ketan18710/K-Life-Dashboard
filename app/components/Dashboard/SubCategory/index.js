@@ -149,6 +149,7 @@ function SubCategory(props) {
         {
           addProdTrigger &&
           <div className="addProd">
+            <h3 className="title">Add New Product</h3>
             <div className="formInput">
               <label htmlFor="Product Title">Product Title</label>
               <input placeholder="Prodcut Name"  onChange={(e)=>setNewProdData({...newProdData,title : e.target.value})} type="text"  value={newProdData.title}/>

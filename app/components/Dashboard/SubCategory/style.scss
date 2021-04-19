@@ -41,6 +41,13 @@
       }
     }
   }
+  .addProd{
+    .title{
+      font-size: 36px;
+      font-weight: $wt-bold;
+      color: $prim-highlight;
+    }
+  }
 }
 .formInput{
   margin: 2rem 0;
