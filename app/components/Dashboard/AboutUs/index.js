@@ -7,11 +7,19 @@ function AboutUs(props) {
   const aboutUS = config && config.aboutUS
   const description = aboutUS &&  aboutUS.description 
   console.log(aboutUS,'aboutUsdescription')
-const [saveContentTrigger, setSaveContentTrigger] = useState(null)
+  const [saveContentTrigger, setSaveContentTrigger] = useState(null)
+  const [loader, setLoader] = useState(null)
   const setAboutUs = (val) => {
     setConfig({...config,aboutUS : {description : val}})
     window.localStorage.setItem('saveContent',true)
   }
+  useEffect(() => {
+    setLoader(true)
+    let x = setTimeout(() => {
+      setLoader(false)
+      clearTimeout(x)
+    }, 3000);
+  }, [])
   useEffect(() => {
     if(window.localStorage.getItem('saveContent')){
       saveData(config)
@@ -24,7 +32,7 @@ const [saveContentTrigger, setSaveContentTrigger] = useState(null)
   return (
     <div  className="Dashboard__aboutUs">
       {
-        saveBtnLoader ? 
+        saveBtnLoader || loader ? 
         <Loader />
         :
         <>
