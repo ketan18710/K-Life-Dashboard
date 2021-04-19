@@ -74,7 +74,7 @@ export function App(props) {
     'gallery' : ['https://image.freepik.com/free-vector/certificate-icon-with-ribbon-medal-flat-design_115464-65.jpg','https://image.freepik.com/free-vector/certificate-icon-with-ribbon-medal-flat-design_115464-65.jpg','https://image.freepik.com/free-vector/certificate-icon-with-ribbon-medal-flat-design_115464-65.jpg','https://image.freepik.com/free-vector/certificate-icon-with-ribbon-medal-flat-design_115464-65.jpg'],
     'categories' : []
   })
-  const [appLoader, setAppLoader] = useState({val : null})
+  const [appLoader, setAppLoader] = useState(null)
   const [loggedIn, setLoggedIn] = useState(null)
   const [saving, setSaving] = useState(null)
   const [loader, setLoader] = useState({
@@ -118,7 +118,7 @@ export function App(props) {
     if(AuthHelper.isAuthenticated()){
       fetchData()
       setLoggedIn(true)
-      setAppLoader({...appLoader, val : true})
+      setAppLoader(true)
     }else{
       // toast.error('login first')
       redirectToUrl(APP_ROUTES.LOGIN)
@@ -136,10 +136,10 @@ export function App(props) {
     if(status === 1){
       let parsed = JSON.parse(data)
       setConfig(parsed)
-      setAppLoader({...appLoader, val : false})
+      setAppLoader(false)
     }else if(status === -1){
       toast.error(data)
-      setAppLoader({...appLoader, val : false})
+      setAppLoader(false)
       redirectToUrl('/error')
     }
   }, [userConfig.status])
@@ -148,13 +148,13 @@ export function App(props) {
   useEffect(() => {
     const {status,data} = save
     if(status === 0){
-      setAppLoader({...appLoader, val : true})
+      setAppLoader(true)
     }else if(status === 1){
       setConfig(data)
-      setAppLoader({...appLoader, val : false})
+      setAppLoader(false)
       toast.success('Saved successfully')
     }else{
-      setAppLoader({...appLoader, val : false})
+      setAppLoader(false)
       toast.error(data)
     }
   }, [save.status])
@@ -182,7 +182,7 @@ export function App(props) {
   return (
     <>
       {
-        appLoader.val? 
+        appLoader? 
         <Loader />
         :
         <div id="AppContainer">
