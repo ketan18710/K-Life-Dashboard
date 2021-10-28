@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './style.scss';
-import {Card3 as Card} from 'components/Cards/index'
+import { Card3 as Card } from 'components/Cards/index';
+import { redirectToUrl, compressFile } from 'utils/common';
 import EditImage from '../../Image/editImage'
 import AddIcon from '../../../images/icons/add.svg'
+import CloseIcon from '../../../images/icons/close.svg'
 import EditIcon from '../../../images/icons/edit.svg'
 import FileUpload from '../../FileUpload/index';
 import Loader from '../../Loader/index';
-import { redirectToUrl, compressFile } from 'utils/common';
-import { APP_ROUTES } from 'utils/constants';
+import { APP_ROUTES , NO_IMAGE } from 'utils/constants';
 import { add } from 'lodash';
 import { toast } from 'react-toastify';
 import { handleImageUpload } from '../../../utils/common';
-import { NO_IMAGE } from '../../../utils/constants';
+
 function DashboardHome(props) {
   const {
     config,
@@ -39,7 +40,7 @@ function DashboardHome(props) {
       carrousel: {
         bool: false,
         index: null,
-        add
+        add,
       },
       KLifeInfo: {
         bool: false,
@@ -55,7 +56,7 @@ function DashboardHome(props) {
       },
     };
     // debugger
-    temp = { ...temp, [type]: { bool: true, index: index, add: add } };
+    temp = { ...temp, [type]: { bool: true, index, add } };
     setactiveType(temp);
   };
   const [addLatestValues, setAddLatestValues] = useState({
@@ -66,6 +67,14 @@ function DashboardHome(props) {
     sub_category_slug: '',
     model_id: '',
   });
+  const [addMarqueeValues, setAddMarqueeValues] = useState({
+    title: '',
+    category_slug: '',
+    products: [],
+    image: '',
+    marquee: false,
+  });
+  console.log(addMarqueeValues, 'addMarqueeValues');
   const category =
     configTemp &&
     configTemp.categories &&
@@ -92,8 +101,18 @@ function DashboardHome(props) {
     }
   }, [addLatestValues.category_slug]);
   useEffect(() => {
-    // console.log(addLatestValues.category_slug)
-  }, [addLatestValues.category_slug]);
+    if (
+      addMarqueeValues.category_slug &&
+      addMarqueeValues.category_slug.length
+    ) {
+      const cat = configTemp.categories.find(
+        cat => cat.category_slug === addMarqueeValues.category_slug,
+      );
+      if (cat) {
+        setAddMarqueeValues(cat);
+      }
+    }
+  }, [addMarqueeValues.category_slug]);
   useEffect(() => {
     setConfigTemp(config);
   }, []);
@@ -103,13 +122,13 @@ function DashboardHome(props) {
   };
 
   const editKLifeInfo = (index, label) => {
-    const temp = configTemp.KLifeInfo
+    const temp = configTemp.KLifeInfo;
     temp[index].label = label;
     console.log({ temp, x: typeof temp });
     updateConfig('KLifeInfo', temp);
   };
   const editMarqueeTitle = (index, title) => {
-    const temp = configTemp.margueeProducts
+    const temp = configTemp.margueeProducts;
     temp[index].title = title;
     console.log({ temp, x: typeof temp });
     updateConfig('margueeProducts', temp);
@@ -119,31 +138,21 @@ function DashboardHome(props) {
       addLatestValues.category_slug.length <= 0 ||
       addLatestValues.model_id.length <= 0
     ) {
-      return
+      return;
     }
     const temp = configTemp.categories;
     const productVals = del ? prod : addLatestValues;
     const categoryIndex = temp.findIndex(
       category => category.category_slug === productVals.category_slug,
     );
-    const subCategory = temp[categoryIndex].subCategories.find(
-      subCategory =>
-        subCategory.sub_category_slug === productVals.sub_category_slug,
-    );
-    const subCategoryIndex = temp[categoryIndex].subCategories.findIndex(
-      subCategory =>
-        subCategory.sub_category_slug === productVals.sub_category_slug,
-    );
-    const product = subCategory.products.find(
+    const product = temp[categoryIndex].products.find(
       product => product.model_id === productVals.model_id,
     );
-    const productIndex = subCategory.products.findIndex(
+    const productIndex = temp[categoryIndex].products.findIndex(
       product => product.model_id === productVals.model_id,
     );
-    product.latest = !del  
-    temp[categoryIndex].subCategories[subCategoryIndex].products[
-      productIndex
-    ] = product;
+    product.latest = !del;
+    temp[categoryIndex].products[productIndex] = product;
     const temp_latest = configTemp.latest;
     if (del) {
       temp_latest.splice(delIndex, 1);
@@ -157,7 +166,7 @@ function DashboardHome(props) {
   const setUploadedMediaFunc = link => {
     const keys = Object.keys(activeType);
     const key = keys && keys.find(key => activeType[key].bool === true);
-    const {index} = activeType[key]
+    const { index } = activeType[key];
     // debugger
     let temp = config;
     const obj = temp[key];
@@ -179,10 +188,22 @@ function DashboardHome(props) {
     setTriggers({ ...triggers, fileModal: false, uploadMedia: false });
   };
 
-  const deleteCarrauselImage = index => {
-    const temp = configTemp.carrousel
+  const deleteMarqueeCat = index => {
+    const temp = configTemp.marqueeCat;
+    const toDelCat = temp[index];
+    const tempCategories = configTemp.categories;
+    const catIndex =
+      tempCategories &&
+      tempCategories.findIndex(
+        cat => cat.category_slug === toDelCat.category_slug,
+      );
+    if (typeof catIndex === 'number' && catIndex >= 0) {
+      tempCategories[catIndex].marquee = false;
+    }
+    console.log(tempCategories);
     temp.splice(index, 1);
-    setConfig({ ...config, carrousel: temp });
+    setConfig({ ...config, marqueeCat: temp });
+    setConfig({ ...config, categories: tempCategories });
   };
 
   useEffect(() => {
@@ -197,9 +218,9 @@ function DashboardHome(props) {
 
   return (
     <div className="Dashboard__home">
-      {saveBtnLoader ? 
-          <Loader />
-          :
+      {saveBtnLoader ? (
+        <Loader />
+        :
         <>
           <FileUpload
             open={triggers.fileModal}
@@ -213,110 +234,21 @@ function DashboardHome(props) {
               SAVE
             </button>
           </div>
-          <div className="carrauselImages">
-            <h3 className="title">Carrausel</h3>
-            <div className="content">
-              {configTemp &&
-                configTemp.carrousel &&
-                configTemp.carrousel.length > 0 &&
-                configTemp.carrousel.map((image, index) => (
-                  <EditImage
-                    src={image}
-                    edit={() => {
-                      setactiveTypeFunc('carrousel', index);
-                      setTriggers({ ...triggers, fileModal: true });
-                    }}
-                    close={() => deleteCarrauselImage(index)}
-                  />
-                ))}
-              <div
-                onClick={() => {
-                  setactiveTypeFunc('carrousel', null, true);
-                  setTriggers({ ...triggers, fileModal: true });
-                }}
-                className="addCarraudelImage"
-              >
-                <img src={AddIcon} alt="add carrausel image" />
-              </div>
-            </div>
-          </div>
-          <div className="KLifeInfo">
-            <h3 className="title">K-Life Info</h3>
-            <div className="content">
-              {configTemp &&
-                configTemp.KLifeInfo &&
-                configTemp.KLifeInfo.map((item, index) => (
-                  <div className="point">
-                    <div className="image">
-                      <img className="hero" src={item.image} />
-                      <img
-                        className="icon"
-                        onClick={() => {
-                          setactiveTypeFunc('KLifeInfo', index);
-                          setTriggers({ ...triggers, fileModal: true });
-                        }}
-                        src={EditIcon}
-                      />
-                    </div>
-                    <input
-                      className="label"
-                      onChange={e => editKLifeInfo(index, e.target.value)}
-                      value={item.label}
-                    />
-                  </div>
-                ))}
-            </div>
-          </div>
           <div className="marquee">
-            <h3 className="title">MARQUEE PRODUCTS</h3>
-            <div className="products">
-              {configTemp &&
-                configTemp.margueeProducts &&
-                configTemp.margueeProducts.length &&
-                configTemp.margueeProducts.map((product, index) => (
-                  <div className="product">
-                    <div className="image">
-                      <img
-                        className="hero"
-                        src={product.image}
-                        alt={product.title + '  image'}
-                      />
-                      <img
-                        className="icon"
-                        onClick={() => {
-                          setactiveTypeFunc('margueeProducts', index);
-                          setTriggers({ ...triggers, fileModal: true });
-                        }}
-                        src={EditIcon}
-                      />
-                    </div>
-                    <input
-                      onChange={e => editMarqueeTitle(index, e.target.value)}
-                      className="title"
-                      type="text"
-                      value={product.title}
-                    />
-                    {/* <h3 className="title">{product.title}</h3> */}
-                  </div>
-                ))}
-            </div>
-          </div>
-          <div className="latestProducts">
-            <h3 className="title">LATEST PRODUCTS</h3>
-            {
-              triggers.addLatest &&
-                <div className="add">
+            <h3 className="title">MARQUEE CATEGORIES</h3>
+            {triggers.addMarquee && (
+              <div className="add">
                 <select
                   onChange={e => {
-                    setAddLatestValues({
-                      ...addLatestValues,
+                    setAddMarqueeValues({
+                      ...addMarqueeValues,
                       category_slug: e.target.value,
                     });
                   }}
                   name="categories"
                 >
                   <option
-                    selected={addLatestValues.category_slug === ''}
+                    selected={addMarqueeValues.category_slug === ''}
                     value=""
                   >
                     Select a Category
@@ -335,7 +267,87 @@ function DashboardHome(props) {
                       </option>
                     ))}
                 </select>
-                {/* {
+                {addMarqueeValues.category_slug && (
+                  <button
+                    className="markLatest btn1__primary"
+                    onClick={() => addNewLatestProd()}
+                  >
+                    Add to Marquee Product
+                  </button>
+                )}
+              </div>
+            )}
+            <div className="products">
+              {configTemp &&
+                configTemp.marqueeCat &&
+                configTemp.marqueeCat.map((product, index) => (
+                  <div className="card">
+                    <img src={product.image} alt="" />
+                    <div className="content">
+                      <h3>{product.title}</h3>
+                      <p
+                        onClick={() =>
+                          redirectToUrl(
+                            APP_ROUTES.CATEGORY_ALIAS(product.category_slug),
+                          )
+                        }
+                      >
+                        {' '}
+                        {`See Full Range   >`}
+                      </p>
+                    </div>
+                    <img
+                      onClick={() => deleteMarqueeCat(index)}
+                      src={CloseIcon}
+                      alt="delete marquee category icon"
+                      className="closeIcon"
+                    />
+                  </div>
+                ))}
+              <div
+                className="Card3 Card3Add"
+                onClick={() => setTriggers({ ...triggers, addMarquee: true })}
+              >
+                <div className="image">
+                  <img className="hero" src={AddIcon} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="latestProducts">
+            <h3 className="title">LATEST PRODUCTS</h3>
+            {triggers.addLatest && (
+              <div className="add">
+                  <select
+                    onChange={e => {
+                      setAddLatestValues({
+                        ...addLatestValues,
+                        category_slug: e.target.value,
+                      });
+                    }}
+                    name="categories"
+                  >
+                    <option
+                      selected={addLatestValues.category_slug === ''}
+                      value=""
+                    >
+                    Select a Category
+                    </option>
+                    {configTemp &&
+                    configTemp.categories &&
+                    configTemp.categories.map(category => (
+                      <option
+                        selected={
+                          addLatestValues.category_slug ===
+                          category.category_slug
+                        }
+                        value={category.category_slug}
+                      >
+                        {category.title}
+                      </option>
+                    ))}
+                  </select>
+                  {/* {
                     addLatestValues.category_slug && addLatestValues.category_slug.length && category &&
                     <select name="sub_category" id="sub_category" onChange={(e)=>{setAddLatestValues({...addLatestValues,sub_category_slug : e.target.value})}} >
                       <option  selected={addLatestValues.sub_category_slug === "" }  value="" >Select a Sub-category</option>
@@ -344,16 +356,16 @@ function DashboardHome(props) {
                       }
                     </select>
                   } */}
-                {addLatestValues.category_slug &&
+                  {addLatestValues.category_slug &&
                   addLatestValues.category_slug.length &&
                   category && (
                     <select
                       name="model_id"
                       id="model_id"
                       onChange={e => {
-                        let prod = JSON.parse(e.target.value);
+                        const prod = JSON.parse(e.target.value);
                         prod.model_id &&
-                          prod.model_id.length &&
+                          prod.model_id.length > 0 &&
                           setAddLatestValues({
                             ...addLatestValues,
                             model_id: prod.model_id,
@@ -387,35 +399,48 @@ function DashboardHome(props) {
                         ))}
                     </select>
                   )}
-                {addLatestValues.category_slug && addLatestValues.model_id && (
-                  <button
-                    className="markLatest btn1__primary"
-                    onClick={() => addNewLatestProd()}
-                  >
+                  {addLatestValues.category_slug && addLatestValues.model_id && (
+                    <button
+                      className="markLatest btn1__primary"
+                      onClick={() => addNewLatestProd()}
+                    >
                     Add to Latest Product
-                  </button>
-                )}
-              </div>
-            }
+                    </button>
+                  )}
+                </div>
+            )}
             <div className="products">
-              {
-                configTemp && configTemp.latest  && configTemp.latest.map((product,index)=>(
+              {configTemp &&
+                configTemp.latest &&
+                configTemp.latest.map((product, index) => (
                   <div className="product">
-                    <Card 
+                    <Card
                       title={product.title}
                       image={product.image ? product.image : NO_IMAGE}
                       description={product.description}
-                      action={()=>redirectToUrl(APP_ROUTES.PRODUCT_ALIAS(product.category_slug,product.sub_category_slug,product.model_id))}
+                      action={() =>
+                        redirectToUrl(
+                          APP_ROUTES.PRODUCT_ALIAS(
+                            product.category_slug,
+                            product.model_id,
+                          ),
+                        )
+                      }
                       actionText="Edit"
-                      close={()=>{setAddLatestValues(product);addNewLatestProd(true,index,product)}}
+                      close={() => {
+                        setAddLatestValues(product);
+                        addNewLatestProd(true, index, product);
+                      }}
                     />
                   </div>
-                ))
-              }
+                ))}
               <div className="product">
-                <div className="Card3 Card3Add" onClick={()=>setTriggers({...triggers,addLatest : true})} >
+                <div
+                  className="Card3 Card3Add"
+                  onClick={() => setTriggers({ ...triggers, addLatest: true })}
+                >
                   <div className="image">
-                    <img className="hero" src={AddIcon}/>
+                    <img className="hero" src={AddIcon} />
                   </div>
                 </div>
               </div>
@@ -426,7 +451,7 @@ function DashboardHome(props) {
               </div> */}
           </div>
         </>
-      }
+      )}
     </div>
   );
 }

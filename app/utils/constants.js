@@ -17,6 +17,8 @@ export const APP_ROUTES = {
   DASHBOARD_ABOUTUS: '/about_us',
   DASHBOARD_GALLERY: '/gallery',
   CATEGORIES: '/categories',
+  UPLOAD_DOCUMENTS: '/upload-documents',
+  CATEGORY_ALIAS: cat => `/categories?category=${cat}`,
   RESET_PASSWORD: '/reset-password',
   PRODUCT: '/:category_slug/:model_id',
   PRODUCT_ALIAS: (category_slug, model_id) => `/${category_slug}/${model_id}`,

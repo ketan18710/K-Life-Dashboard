@@ -1,0 +1,52 @@
+@import '../../../styles/base/main.scss';
+.UploadDocuments{
+    .header{
+        @include spaceBetween;
+        margin: 2rem 0;
+        h3{
+            color: $prim-highlight;
+            margin: 0;
+            font-size: 36px;
+        }
+    }
+    .addNewDocument{
+        width: 100%;
+        button{
+            width: fit-content;
+            max-width: 25%;
+            margin-right: auto;
+        }
+    }
+    .displayDocuments{
+        margin: 3rem 0;
+        @include centreAlign;
+        justify-content: flex-start;
+        gap: 2rem;
+        flex-wrap: wrap;
+        .wrapper{
+            position: relative;
+            a{
+                width: fit-content;
+                padding: 0.2rem 0.5rem;
+                text-decoration: none;
+            }
+            img{
+                position: absolute;
+                top: -20px;
+                right: -0.8rem;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                display: none;
+                padding: 4px;
+                box-sizing: content-box;
+                cursor: pointer;
+            }
+            &:hover{
+                img{
+                    display: block;
+                }
+            }
+        }
+    }
+}

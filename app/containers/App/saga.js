@@ -7,6 +7,7 @@ import {
   DEFAULT_IMAGE_2,
   NO_IMAGE,
 } from 'utils/constants';
+import { toast } from 'react-toastify';
 import {
   GET_DATA,
   GET_LOGIN,
@@ -92,6 +93,8 @@ function* saveDataFunc(data) {
       );
     } else if (statusCode === STATUS_CODES.LOGIN_EXPIRED) {
       AuthHelper.logout();
+      toast.error('Please login to continue');
+      window.location.reload();
     } else {
       yield put(
         saveDataResult({

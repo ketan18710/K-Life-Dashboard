@@ -98,75 +98,85 @@
     }
   }
   .marquee{
+    .add{
+      button{
+        width: fit-content;
+        margin: 0 1rem;
+      }
+    }
     .products{
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
       // padding: 2rem 4%;
       padding-right: 20%;
-      gap: 1rem;
-      .product{
-        min-width: 300px;
-        max-width: 300px;
-        margin-bottom : 2rem;
-        padding: 1rem;
-        cursor: pointer;
-        // box-shadow: 3px 3px 5px $primary-green, -3px -3px 5px #fefefa;
-        border: 1px solid $darkGrey;
-        border-radius: 8px;
-        .image{
-          width: 100%;
-          max-width: 100%;
-          height: 250px;
-          @include centreAlign;
-          background-color: $white;
-          position: relative;
-          .hero{
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-          }
-          .icon{
-            position: absolute;
-            top: 100px;
-            left: 90px;
-            width: 70px;
-            height: 70px;
-            padding: 15px;
-            display: none;
-            cursor: pointer;
-            border: 1px solid $darkGrey;
-            border-radius: 50%;
-            background-color: $white;
-          }
-          &:hover{
-            .icon{
-              display: block;
-            }
-          }
-          
-        }
-        .title{
-          width: 100%;
-          max-width: 100%;
-          height: 50px;
-          font-size: 18px;
-          font-weight: 600;
-          margin: 0;
-          // background-color: $primary-green;
-          @include centreAlign;
-          color: $darkGrey;
-          border: none;
-          &:active,&:focus{
-            outline: none;
-          }
-        }
-      }
-      @media  (max-width: 1100px) {
-        //do Smth
+      gap: 2rem;
+      .card{
+        // width: fit-content;
+        height: 400px;
+        background-size: cover;
+        display: flex;
+        align-items: flex-end;
         flex-direction: column;
-        // justify-content: center;
-        @include centreAlign;
-        padding: 0;
+        position: relative;
+        width: 350px !important;
+        max-width: 80vw !important;
+        @media screen and (max-width : 1200px) and (min-width : 1000px) {
+          width: 300px !important;
+        }
+        img{
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .content{
+          position: absolute;
+          bottom: 0;
+          margin-top: auto;
+          width: 100%;
+          height: 130px;
+          background: rgba(31, 160, 160, 0.9);
+          color: $white;
+          padding: 1rem;
+          display: flex;
+          flex-direction: column;
+          h3{
+            border-bottom: 3px solid $white;
+            padding-bottom: 1rem;
+            font-weight: 600;
+            font-size: 24px;
+            margin-top: auto;
+            margin-bottom: 0;
+
+          }
+          p{
+            font-weight: 600;
+            color: $white;
+            margin: 0.5rem 0 0;
+            font-size: 14px;
+            line-height: 19px;
+            text-align: left;
+          }
+        }
+        .closeIcon{
+          position: absolute;
+          top: 0;
+          right: 0;
+          padding: 4px;
+          width: 30px;
+          height: 30px;
+          box-sizing: content-box;
+          border: 1px solid;
+          border-radius: 50%;
+          cursor: pointer;
+          display: none;
+        }
+        &:hover{
+          .closeIcon{
+            display: block;
+          }
+        }
       }
     }
   }
@@ -185,9 +195,10 @@
       }
     }
     .products{
-      display: grid;
-      grid-template-columns: 30% 30% 30%;
-      gap: 2rem 2rem;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 2rem;
       .Card3Add{
         @include centreAlign;
       }

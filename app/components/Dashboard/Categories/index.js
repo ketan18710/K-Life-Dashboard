@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { APP_ROUTES } from 'utils/constants';
-import { redirectToUrl } from 'utils/common';
+import {
+  redirectToUrl,
+  getUrlParam,
+  setUrlParam,
+  removeUrlParam,
+} from 'utils/common';
 import Loader from 'components/Loader';
+import { toast } from 'react-toastify';
 import ADD_ICON from '../../../images/icons/add.svg';
+import EditIcon from '../../../images/icons/edit.svg'
 import CLOSE_ICON from '../../../images/icons/close.svg';
 import FileUpload from '../../FileUpload/index';
-import { toast } from 'react-toastify';
 import './style.scss';
 import Error404 from '../../Error404';
 function Categories(props) {
@@ -30,9 +36,9 @@ function Categories(props) {
     model_id: '',
     images: [],
     description: [],
-    manuals: [],
+    manuals: null,
     features: [],
-    plusPoints: [],
+    video: '',
     specs: [],
   };
   const [category, setCategory] = useState(null);
@@ -42,7 +48,8 @@ function Categories(props) {
   const [media, setMedia] = useState(null);
   const [newCategoryTrigger, setNewCategoryTrigger] = useState(null);
   const [newSubCategoryTrigger, setNewSubCategoryTrigger] = useState(null);
-  console.log(category,'category')
+  const CATEGORY = 'category';
+  console.log(category, 'category');
   const [newCategValidate, setnewCategValidate] = useState({
     title: null,
     slug: null,
@@ -141,15 +148,24 @@ function Categories(props) {
   const setUploadedMediaFunc = link => {
     // debugger;
     // category.image = link.link
-    setCategory({...category,image : link.link})
-    toast.success('Uploaded successfully');
-    let temp = config.categories
-    let catTemp = category
-    debugger
-    catTemp.image = link.link
-    temp[categoryIndex] = catTemp
-    setConfig({...config,categories : temp})
+    console.log(props, 'props');
+    // debugger
     setTriggers({ ...triggers, uploadMedia: false, fileModal: false });
+    const temp = config.categories
+    toast.success('Uploaded successfully');
+    const param = getUrlParam(CATEGORY);
+    let categoryIndex = null;
+    let cat = null;
+    if (param) {
+      cat = categories && categories.find(cat => cat.category_slug === param);
+      categoryIndex =
+        categories && categories.findIndex(cat => cat.category_slug === param);
+      cat.image = link.link;
+      setCategory(cat);
+      setCategoryIndex(categoryIndex);
+    }
+    temp[categoryIndex] = cat;
+    setConfig({ ...config, categories: temp });
   };
   const editCategory = (type, val) => {
     setCategory({ ...category, [type]: val });
@@ -159,11 +175,27 @@ function Categories(props) {
   };
   const saveCategoryChanges = () => {
     config_temp.categories[categoryIndex] = category;
-    // setConfig({...config,categories : config_temp})
+    const prod =
+      config_temp.marqueeCat &&
+      config_temp.marqueeCat.find(
+        prod => prod.category_slug === category.category_slug,
+      );
+    const prodIndex =
+      config_temp.marqueeCat &&
+      config_temp.marqueeCat.findIndex(
+        prod => prod.category_slug === category.category_slug,
+      );
+    if (category.marquee && !prod) {
+      config_temp.marqueeCat.push(category);
+    } else if (category.marquee && prod) {
+      config_temp.marqueeCat[prodIndex] = category;
+    } else if (!category.marquee && prod) {
+      config_temp.marqueeCat.splice(prodIndex, 1);
+    }
     saveData(config_temp);
   };
   const deleteProduc = index => {
-    const temp = category.products
+    const temp = category.products;
     const prod = temp[index];
     if (
       config_temp.latest &&
@@ -178,13 +210,25 @@ function Categories(props) {
         );
       config_temp.latest.splice(latIndex, 1);
     }
-    debugger;
     temp.splice(index, 1);
     setCategory({ ...category, products: temp });
   };
   const deleteCategory = () => {
     const temp = config;
     temp.categories.splice(categoryIndex, 1);
+    const prod = temp.marqueeCat.find(
+      prod => prod.category_slug === category.category_slug,
+    );
+    const prodIndex = temp.marqueeCat.findIndex(
+      prod => prod.category_slug === category.category_slug,
+    );
+    if (prod) {
+      temp.marqueeCat.splice(prodIndex, 1);
+      const {latest} = temp
+      temp.latest = latest.filter(
+        item => item.category_slug !== prod.category_slug,
+      );
+    }
     saveData(temp);
   };
   const addProd = () => {
@@ -197,9 +241,7 @@ function Categories(props) {
     }
     if (
       category.products &&
-      category.products.find(prod => {
-        return prod.model_id === newProd.model_id;
-      })
+      category.products.find(prod => prod.model_id === newProd.model_id)
     ) {
       validate.model_id = 'Model Id should be unique';
     } else if (newProd.model_id.length <= 0 || !newProd.model_id) {
@@ -230,6 +272,22 @@ function Categories(props) {
       setUploadedMediaFunc(uploadImageData.data);
     }
   }, [triggers.uploadMedia]);
+  useEffect(() => {
+    if (category) {
+      setUrlParam(CATEGORY, category.category_slug);
+    }
+  }, [category]);
+  useEffect(() => {
+    const param = getUrlParam(CATEGORY);
+    if (param) {
+      const cat =
+        categories && categories.find(cat => cat.category_slug === param);
+      const catIndex =
+        categories && categories.findIndex(cat => cat.category_slug === param);
+      setCategory(cat);
+      setCategoryIndex(catIndex);
+    }
+  }, []);
   return (
     <>
       <FileUpload
@@ -239,24 +297,45 @@ function Categories(props) {
         onChangeMediaFunc={e => onChangeMediaFunc(e)}
         submitMediaFormFunc={() => submitMediaFormFunc()}
       />
-      {saveBtnLoader ? 
+      {saveBtnLoader ? (
         <Loader />
-        :
+      ) : (
         <div className="Categories">
           <div className="header">
             <h3 className="title">Product Categories</h3>
             <div className="action">
-              <button className="btn1__secondary" onClick={()=>{setCategory(newCategory);setNewCategoryTrigger(true)}}>Add New Category</button>
+              <button
+                className="btn1__secondary"
+                onClick={() => {
+                  setCategory(newCategory);
+                  setNewCategoryTrigger(true);
+                  removeUrlParam(CATEGORY);
+                }}
+              >
+                Add New Category
+              </button>
             </div>
           </div>
-          <select className="selectCategory" name="categories" onChange={(e)=>{ const x = JSON.parse(e.target.value); setCategoryIndex(x.index) ;setCategory(x.category) ;setNewCategoryTrigger(false) }}>
+          <select
+            value={category}
+            className="selectCategory"
+            name="categories"
+            onChange={e => {
+              const x = JSON.parse(e.target.value);
+              setCategoryIndex(x.index);
+              setCategory(x.category);
+              setNewCategoryTrigger(false);
+            }}
+          >
             <option value={JSON.stringify({})}>Select Category</option>
-            {
-              categories && categories.map((category,index)=><option value={JSON.stringify({category,index})}>{category.title}</option>)
-            }
+            {categories &&
+              categories.map((category, index) => (
+                <option value={JSON.stringify({ category, index })}>
+                  {category.title}
+                </option>
+              ))}
           </select>
-          {
-            category  && Object.keys(category).length > 0 && !newCategoryTrigger &&
+          {category && Object.keys(category).length > 0 && !newCategoryTrigger && (
             <div className="categoryForm">
               <div className="formGroup">
                 <div className="formInput">
@@ -307,13 +386,43 @@ function Categories(props) {
                   id=""
                 />
               </div>
-              <div
-                onClick={() => {
-                  setTriggers({ ...triggers, fileModal: true });
-                }}
-                className="editableImage editableImageAdd"
-              >
-                <img className="addIcon" src={ADD_ICON} alt="add icon" />
+              <div className="formInput">
+                <label htmlFor=""> Category Image</label>
+              </div>
+              <div className="image formInput">
+                {category && category.image ? (
+                    <div className="mainImage">
+                      <img
+                      src={category && category.image}
+                      className="main"
+                      alt=""
+                    />
+                      <div className="editWrapper">
+                        <img
+                          className="edit"
+                          onClick={() => {
+                            let temp = config.categories;
+                            temp[categoryIndex] = category;
+                            setConfig({ ...config, categories: temp });
+                            setTriggers({ ...triggers, fileModal: true });
+                          }}
+                          src={EditIcon}
+                        />
+                      </div>
+                    </div>
+                    :
+                    <div
+                      onClick={() => {
+                        let temp = config.categories;
+                        temp[categoryIndex] = category;
+                        setConfig({ ...config, categories: temp });
+                        setTriggers({ ...triggers, fileModal: true });
+                      }}
+                      className="editableImage editableImageAdd"
+                    >
+                      <img className="addIcon" src={ADD_ICON} alt="add icon" />
+                    </div>
+                )}
               </div>
               <div className="formInput">
                 <label htmlFor="category subcaegories">Products : </label>
@@ -428,9 +537,8 @@ function Categories(props) {
                 </div>
               )}
             </div>
-          }
-          {
-            newCategoryTrigger &&
+          )}
+          {newCategoryTrigger && (
             <div className="addNewCategory">
               <h3 className="title">Add New Category</h3>
               <div className="formInput">
@@ -464,9 +572,9 @@ function Categories(props) {
                 ADD
               </button>
             </div>
-          }
+          )}
         </div>
-      }
+      )}
     </>
   );
 }

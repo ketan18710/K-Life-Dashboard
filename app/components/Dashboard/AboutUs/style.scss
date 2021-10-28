@@ -1,5 +1,18 @@
 @import '../../../styles/base/main.scss';
 .Dashboard__aboutUs{
+  .header{
+    @include spaceBetween;
+    .title{
+      font-size: 44px;
+      font-weight: $wt-extraBold;
+      color: $prim-highlight;
+    }
+    button{
+      margin-right: 5rem;
+      height: 35px;
+      font-size: 20px;
+    }
+  }
   .actions{
     margin-bottom: 0.4rem;
     display: flex;
@@ -8,5 +21,10 @@
       font-size: 18px;
       font-weight: 600;
     }
+  }
+  textarea{
+    width: 100%;
+    margin: 2rem 0;
+    padding: 1rem;
   }
 }

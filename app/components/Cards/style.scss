@@ -100,13 +100,15 @@
 .Card3{
   width: 350px;
   padding: 1rem;
-  height: 600px;
+  height: 100%;
   // max-height: 550px;
   // border-radius: 14px;
   // border: 1px solid $darkGrey;
   box-shadow: 3px 3px 5px #555555, -3px -3px 5px #fefefa;
   border-radius: 8px;
+  flex-direction: column;
   position: relative;
+  @include centreAlign;
   &:hover{
     // box-shadow: -2px 3px 10px 0px rgba(54,69,79,0.52);
     // -webkit-box-shadow: -2px 3px 10px 0px rgba(54,69,79,0.52);

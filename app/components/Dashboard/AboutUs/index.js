@@ -1,54 +1,46 @@
-import React,{useState,useEffect} from 'react'
-import TextEditor from 'components/TextEditor/index'
-import './style.scss'
-import Loader from '../../Loader'
+import React, { useState, useEffect } from 'react';
+import './style.scss';
+import Loader from '../../Loader';
 function AboutUs(props) {
-  const {config,setConfig,save,saveData,saveBtnLoader} = props
-  const aboutUS = config && config.aboutUS
-  const description = aboutUS &&  aboutUS.description 
-  console.log(aboutUS,'aboutUsdescription')
-  const [saveContentTrigger, setSaveContentTrigger] = useState(null)
-  const [loader, setLoader] = useState(null)
-  const setAboutUs = (val) => {
-    setConfig({...config,aboutUS : {description : val}})
-    window.localStorage.setItem('saveContent',true)
-  }
+  const { config, setConfig, save, saveData, saveBtnLoader } = props;
+  const [data, setData] = useState('');
+  const [loader, setLoader] = useState(null);
   useEffect(() => {
-    setLoader(true)
-    let x = setTimeout(() => {
-      setLoader(false)
-      clearTimeout(x)
-    }, 3000);
-  }, [])
-  useEffect(() => {
-    if(window.localStorage.getItem('saveContent')){
-      saveData(config)
-      window.localStorage.removeItem('saveContent')
+    // debugger
+    if (Array.isArray(config.aboutUS)) {
+      setData(config.aboutUS.join('\n'));
     }
-  }, [config])
-  // useEffect(() => {
-  //  alert(1)
-  // }, [config])
+  }, [config]);
+  const saveContent = () => {
+    const temp = config;
+    config.aboutUS = data.split('\n');
+    saveData(temp);
+  };
+
   return (
-    <div  className="Dashboard__aboutUs">
-      {
-        saveBtnLoader || loader ? 
-        <Loader />
-        :
+    <div className="Dashboard__aboutUs">
+      {saveBtnLoader || loader ? (
+          <Loader />
+          :
         <>
-          <div className="actions">
-            <button className="btn1__primary" onClick={()=>setSaveContentTrigger(true)}> Save</button>
+          <div className="header">
+            <h3 className="title">ABOUT US : </h3>
+            <button className="btn2__primary" onClick={() => saveContent()}>
+              SAVE
+            </button>
           </div>
-          <TextEditor 
-            content={description}
-            setHtml = {(html)=>setAboutUs(html)}
-            saveContentTrigger={saveContentTrigger}
+          {/* <div className="actions">
+            <button className="btn1__primary" onClick={()=>setSaveContentTrigger(true)}> Save</button>
+          </div> */}
+          <textarea
+            value={data}
+            onChange={e => setData(e.target.value)}
+            rows="20"
           />
         </>
-        
-      }
+      )}
     </div>
-  )
+  );
 }
 
-export default AboutUs
+export default AboutUs;
