@@ -9,7 +9,7 @@ import {
 import Loader from 'components/Loader';
 import { toast } from 'react-toastify';
 import ADD_ICON from '../../../images/icons/add.svg';
-import EditIcon from '../../../images/icons/edit.svg'
+import EditIcon from '../../../images/icons/edit.svg';
 import CLOSE_ICON from '../../../images/icons/close.svg';
 import FileUpload from '../../FileUpload/index';
 import './style.scss';
@@ -151,7 +151,7 @@ function Categories(props) {
     console.log(props, 'props');
     // debugger
     setTriggers({ ...triggers, uploadMedia: false, fileModal: false });
-    const temp = config.categories
+    const temp = config.categories;
     toast.success('Uploaded successfully');
     const param = getUrlParam(CATEGORY);
     let categoryIndex = null;
@@ -186,6 +186,7 @@ function Categories(props) {
         prod => prod.category_slug === category.category_slug,
       );
     if (category.marquee && !prod) {
+      debugger;
       config_temp.marqueeCat.push(category);
     } else if (category.marquee && prod) {
       config_temp.marqueeCat[prodIndex] = category;
@@ -224,7 +225,7 @@ function Categories(props) {
     );
     if (prod) {
       temp.marqueeCat.splice(prodIndex, 1);
-      const {latest} = temp
+      const { latest } = temp;
       temp.latest = latest.filter(
         item => item.category_slug !== prod.category_slug,
       );
@@ -391,37 +392,37 @@ function Categories(props) {
               </div>
               <div className="image formInput">
                 {category && category.image ? (
-                    <div className="mainImage">
-                      <img
+                  <div className="mainImage">
+                    <img
                       src={category && category.image}
                       className="main"
                       alt=""
                     />
-                      <div className="editWrapper">
-                        <img
-                          className="edit"
-                          onClick={() => {
-                            let temp = config.categories;
-                            temp[categoryIndex] = category;
-                            setConfig({ ...config, categories: temp });
-                            setTriggers({ ...triggers, fileModal: true });
-                          }}
-                          src={EditIcon}
-                        />
-                      </div>
+                    <div className="editWrapper">
+                      <img
+                        className="edit"
+                        onClick={() => {
+                          let temp = config.categories;
+                          temp[categoryIndex] = category;
+                          setConfig({ ...config, categories: temp });
+                          setTriggers({ ...triggers, fileModal: true });
+                        }}
+                        src={EditIcon}
+                      />
                     </div>
-                    :
-                    <div
-                      onClick={() => {
-                        let temp = config.categories;
-                        temp[categoryIndex] = category;
-                        setConfig({ ...config, categories: temp });
-                        setTriggers({ ...triggers, fileModal: true });
-                      }}
-                      className="editableImage editableImageAdd"
-                    >
-                      <img className="addIcon" src={ADD_ICON} alt="add icon" />
-                    </div>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => {
+                      let temp = config.categories;
+                      temp[categoryIndex] = category;
+                      setConfig({ ...config, categories: temp });
+                      setTriggers({ ...triggers, fileModal: true });
+                    }}
+                    className="editableImage editableImageAdd"
+                  >
+                    <img className="addIcon" src={ADD_ICON} alt="add icon" />
+                  </div>
                 )}
               </div>
               <div className="formInput">

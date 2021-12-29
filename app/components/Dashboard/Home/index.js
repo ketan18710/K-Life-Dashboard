@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './style.scss';
 import { Card3 as Card } from 'components/Cards/index';
 import { redirectToUrl, compressFile } from 'utils/common';
-import EditImage from '../../Image/editImage'
-import AddIcon from '../../../images/icons/add.svg'
-import CloseIcon from '../../../images/icons/close.svg'
-import EditIcon from '../../../images/icons/edit.svg'
+import EditImage from '../../Image/editImage';
+import AddIcon from '../../../images/icons/add.svg';
+import CloseIcon from '../../../images/icons/close.svg';
+import EditIcon from '../../../images/icons/edit.svg';
 import FileUpload from '../../FileUpload/index';
 import Loader from '../../Loader/index';
-import { APP_ROUTES , NO_IMAGE } from 'utils/constants';
+import { APP_ROUTES, NO_IMAGE } from 'utils/constants';
 import { add } from 'lodash';
 import { toast } from 'react-toastify';
 import { handleImageUpload } from '../../../utils/common';
@@ -220,8 +220,9 @@ function DashboardHome(props) {
     <div className="Dashboard__home">
       {saveBtnLoader ? (
         <Loader />
-        :
+      ) : (
         <>
+          (
           <FileUpload
             open={triggers.fileModal}
             close={() => setTriggers({ ...triggers, fileModal: false })}
@@ -318,22 +319,22 @@ function DashboardHome(props) {
             <h3 className="title">LATEST PRODUCTS</h3>
             {triggers.addLatest && (
               <div className="add">
-                  <select
-                    onChange={e => {
-                      setAddLatestValues({
-                        ...addLatestValues,
-                        category_slug: e.target.value,
-                      });
-                    }}
-                    name="categories"
+                <select
+                  onChange={e => {
+                    setAddLatestValues({
+                      ...addLatestValues,
+                      category_slug: e.target.value,
+                    });
+                  }}
+                  name="categories"
+                >
+                  <option
+                    selected={addLatestValues.category_slug === ''}
+                    value=""
                   >
-                    <option
-                      selected={addLatestValues.category_slug === ''}
-                      value=""
-                    >
                     Select a Category
-                    </option>
-                    {configTemp &&
+                  </option>
+                  {configTemp &&
                     configTemp.categories &&
                     configTemp.categories.map(category => (
                       <option
@@ -346,8 +347,8 @@ function DashboardHome(props) {
                         {category.title}
                       </option>
                     ))}
-                  </select>
-                  {/* {
+                </select>
+                {/* {
                     addLatestValues.category_slug && addLatestValues.category_slug.length && category &&
                     <select name="sub_category" id="sub_category" onChange={(e)=>{setAddLatestValues({...addLatestValues,sub_category_slug : e.target.value})}} >
                       <option  selected={addLatestValues.sub_category_slug === "" }  value="" >Select a Sub-category</option>
@@ -356,7 +357,7 @@ function DashboardHome(props) {
                       }
                     </select>
                   } */}
-                  {addLatestValues.category_slug &&
+                {addLatestValues.category_slug &&
                   addLatestValues.category_slug.length &&
                   category && (
                     <select
@@ -399,15 +400,15 @@ function DashboardHome(props) {
                         ))}
                     </select>
                   )}
-                  {addLatestValues.category_slug && addLatestValues.model_id && (
-                    <button
-                      className="markLatest btn1__primary"
-                      onClick={() => addNewLatestProd()}
-                    >
+                {addLatestValues.category_slug && addLatestValues.model_id && (
+                  <button
+                    className="markLatest btn1__primary"
+                    onClick={() => addNewLatestProd()}
+                  >
                     Add to Latest Product
-                    </button>
-                  )}
-                </div>
+                  </button>
+                )}
+              </div>
             )}
             <div className="products">
               {configTemp &&

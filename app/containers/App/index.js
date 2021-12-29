@@ -18,19 +18,26 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from './saga';
 import { Switch, Route } from 'react-router-dom';
 import './style.scss';
-import {DEFAULT_IMAGE_1 as IMG1,DEFAULT_IMAGE_2 as IMG2,API_CONSTANTS,APP_ROUTES,redirectFor,user} from 'utils/constants'
-import {AuthHelper,redirectToUrl} from 'utils/common'
+import {
+  DEFAULT_IMAGE_1 as IMG1,
+  DEFAULT_IMAGE_2 as IMG2,
+  API_CONSTANTS,
+  APP_ROUTES,
+  redirectFor,
+  user,
+} from 'utils/constants';
+import { AuthHelper, redirectToUrl } from 'utils/common';
 import Sidebar from 'components/Sidebar';
-import Loader from 'components/Loader'
-import Login from 'components/Login'
-import ResetPassword from 'components/ResetPassword'
-import Home from 'components/Dashboard/Home'
-import AboutUs from 'components/Dashboard/AboutUs'
-import Gallery from 'components/Dashboard/Gallery'
-import Categories from 'components/Dashboard/Categories'
-import UploadDocuments from 'components/Dashboard/UploadDocuments'
-import SubCategory from 'components/Dashboard/SubCategory'
-import Product from 'components/Dashboard/Product'
+import Loader from 'components/Loader';
+import Login from 'components/Login';
+import ResetPassword from 'components/ResetPassword';
+import Home from 'components/Dashboard/Home';
+import AboutUs from 'components/Dashboard/AboutUs';
+import Gallery from 'components/Dashboard/Gallery';
+import Categories from 'components/Dashboard/Categories';
+import UploadDocuments from 'components/Dashboard/UploadDocuments';
+import SubCategory from 'components/Dashboard/SubCategory';
+import Product from 'components/Dashboard/Product';
 import reducer from './reducer';
 import {
   getData,
@@ -233,18 +240,19 @@ export function App(props) {
       uploadImageData.status === API_CONSTANTS.success &&
       triggers.uploadingDocument
     ) {
-      setTriggers({...triggers,uploadingDocument : false})
-      toast.success('Document uploaded successfully')
-      let temp = config.catalogues
-      temp && temp.push(uploadImageData && uploadImageData.data)
-      resetUploadImage()
-      setConfig({...config,catalogues : temp})
+      setTriggers({ ...triggers, uploadingDocument: false });
+      toast.success('Document uploaded successfully');
+      let temp = config.catalogues;
+      temp && temp.push(uploadImageData && uploadImageData.data);
+      resetUploadImage();
+      setConfig({ ...config, catalogues: temp });
     } else if (
       uploadImageData.status === API_CONSTANTS.error &&
       triggers.uploadingDocument
-      setTriggers({...triggers,uploadingDocument : false})
-      toast.error(uploadImageData.data)
-      resetUploadImage()
+    ) {
+      setTriggers({ ...triggers, uploadingDocument: false });
+      toast.error(uploadImageData.data);
+      resetUploadImage();
     }
   }, [uploadImageData.status]);
   return (

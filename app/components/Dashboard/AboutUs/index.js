@@ -20,8 +20,8 @@ function AboutUs(props) {
   return (
     <div className="Dashboard__aboutUs">
       {saveBtnLoader || loader ? (
-          <Loader />
-          :
+        <Loader />
+      ) : (
         <>
           <div className="header">
             <h3 className="title">ABOUT US : </h3>

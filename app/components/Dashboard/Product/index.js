@@ -123,7 +123,7 @@ function Product(props) {
     if (prod) {
       setProduct(prod);
       if (prod.video) {
-        setVideoURLholder(`https://www.youtube.com/watch?v=${  prod.video}`);
+        setVideoURLholder(`https://www.youtube.com/watch?v=${prod.video}`);
       }
     }
   }, [prod]);
@@ -285,6 +285,8 @@ function Product(props) {
                 Add URL
               </button>
             </div>
+          </div>
+          <div>
             {product && product.video && product.video.length >= 0 && (
               <iframe
                 width="100%"
@@ -293,7 +295,7 @@ function Product(props) {
                 title="YouTube video player"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen>
+                allowFullScreen
               />
             )}
           </div>
@@ -309,7 +311,7 @@ function Product(props) {
                       href={product.manuals.link}
                       className="btn1__primary productManualButton"
                     >
-                      {`${product.title  } User Manual`}
+                      {`${product.title} User Manual`}
                     </a>
                   )}
                 <a
@@ -452,5 +454,4 @@ function Product(props) {
     </>
   );
 }
-
 export default Product;
